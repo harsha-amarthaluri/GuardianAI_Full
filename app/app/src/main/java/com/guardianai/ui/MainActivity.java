@@ -29,6 +29,7 @@ import com.guardianai.data.sync.SyncManager;
 import com.guardianai.data.tracking.LocationTrackingService;
 import com.guardianai.data.tracking.TrackingStateManager;
 import com.guardianai.ui.auth.LoginActivity;
+import com.guardianai.utils.UpdateManager;
 import com.guardianai.utils.ValidationUtils;
 
 import org.osmdroid.config.Configuration;
@@ -92,8 +93,8 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
     // Settings & Profile Components
     private TextView textProfileName, textProfileEmail, textProfilePhone;
     private EditText editProfileName, editProfilePhone;
-    private TextView textOfflineQueueCount;
-    private Button btnSaveProfile, btnLogout, btnForceSyncQueue, btnLaunchAiSupport, btnDeleteAccount;
+    private TextView textOfflineQueueCount, textAppVersionInfo;
+    private Button btnSaveProfile, btnLogout, btnForceSyncQueue, btnLaunchAiSupport, btnDeleteAccount, btnCheckUpdates;
 
     // Location State
     private double currentLat = 37.7749;
@@ -236,6 +237,8 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
         btnForceSyncQueue = findViewById(R.id.btnForceSyncQueue);
         btnLaunchAiSupport = findViewById(R.id.btnLaunchAiSupport);
         btnDeleteAccount = findViewById(R.id.btnDeleteAccount);
+        textAppVersionInfo = findViewById(R.id.textAppVersionInfo);
+        btnCheckUpdates = findViewById(R.id.btnCheckUpdates);
 
         // Home Actions
         btnTriggerSOS.setOnClickListener(v -> showSOSConfirmationDialog());
@@ -281,6 +284,10 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
             Toast.makeText(this, "Batch synchronization triggered.", Toast.LENGTH_SHORT).show();
             updateOfflineQueueCount();
         });
+
+        if (btnCheckUpdates != null) {
+            btnCheckUpdates.setOnClickListener(v -> performUpdateCheck());
+        }
     }
 
     private void setupNavigation() {
@@ -932,6 +939,9 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
         });
 
         updateOfflineQueueCount();
+        if (textAppVersionInfo != null) {
+            textAppVersionInfo.setText("Installed Version: v" + UpdateManager.getCurrentVersionName(this) + " (Build " + UpdateManager.getCurrentVersionCode(this) + ")");
+        }
     }
 
     private void updateOfflineQueueCount() {
@@ -1001,5 +1011,81 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
+    }
+
+    private void performUpdateCheck() {
+        android.app.ProgressDialog progressDialog = new android.app.ProgressDialog(this);
+        progressDialog.setMessage("Checking for updates...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        UpdateManager.checkForUpdates(this, new UpdateManager.UpdateCheckCallback() {
+            @Override
+            public void onUpdateAvailable(UpdateManager.UpdateInfo info, int currentVersionCode) {
+                progressDialog.dismiss();
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("🎉 Update Available! (v" + info.getVersionName() + ")")
+                        .setMessage("A new version of Guardian AI is available.\n\nCurrent Version: Build " + currentVersionCode + "\nLatest Version: Build " + info.getVersionCode() + "\n\nChangelog:\n" + info.getChangelog())
+                        .setPositiveButton("Update Now", (dialog, which) -> downloadAndInstallUpdate(info.getDownloadUrl()))
+                        .setNegativeButton("Later", null)
+                        .show();
+            }
+
+            @Override
+            public void onNoUpdateAvailable(int currentVersionCode) {
+                progressDialog.dismiss();
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("Up to Date")
+                        .setMessage("You are using the latest version of Guardian AI (Build " + currentVersionCode + ").")
+                        .setPositiveButton("OK", null)
+                        .show();
+            }
+
+            @Override
+            public void onError(String error) {
+                progressDialog.dismiss();
+                Toast.makeText(MainActivity.this, "Check updates failed: " + error, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void downloadAndInstallUpdate(String downloadUrl) {
+        if (downloadUrl == null || downloadUrl.isEmpty()) {
+            Toast.makeText(this, "Invalid download URL.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        android.app.ProgressDialog downloadProgress = new android.app.ProgressDialog(this);
+        downloadProgress.setTitle("Downloading Update");
+        downloadProgress.setMessage("Please wait while the update is being downloaded...");
+        downloadProgress.setProgressStyle(android.app.ProgressDialog.STYLE_HORIZONTAL);
+        downloadProgress.setIndeterminate(false);
+        downloadProgress.setMax(100);
+        downloadProgress.setCancelable(false);
+        downloadProgress.show();
+
+        UpdateManager.downloadAndInstallApk(this, downloadUrl, new UpdateManager.ProgressCallback() {
+            @Override
+            public void onProgress(int progress, long downloadedBytes, long totalBytes) {
+                if (progress >= 0) {
+                    downloadProgress.setProgress(progress);
+                    downloadProgress.setMessage(String.format("Downloading update... %d%% (%d MB / %d MB)", progress, downloadedBytes / (1024 * 1024), totalBytes / (1024 * 1024)));
+                } else {
+                    downloadProgress.setMessage(String.format("Downloading update... (%d MB downloaded)", downloadedBytes / (1024 * 1024)));
+                }
+            }
+
+            @Override
+            public void onDownloadComplete(java.io.File apkFile) {
+                downloadProgress.dismiss();
+                Toast.makeText(MainActivity.this, "Download complete! Opening installer...", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(String error) {
+                downloadProgress.dismiss();
+                Toast.makeText(MainActivity.this, "Download failed: " + error, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

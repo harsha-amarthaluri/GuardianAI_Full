@@ -1,0 +1,6 @@
+{
+  "versionCode": 2,
+  "versionName": "1.0.1",
+  "downloadUrl": "https://raw.githubusercontent.com/harsha-amarthaluri/GuardianAI_Full/refs/heads/main/Apk/app-debug.apk",
+  "changelog": "• Added In-App Update Checker in Settings\n• Direct APK download with live progress bar\n• Automatic FileProvider installer launch"
+}
