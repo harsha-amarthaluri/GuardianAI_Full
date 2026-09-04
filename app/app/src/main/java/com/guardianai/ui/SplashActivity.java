@@ -9,11 +9,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.guardianai.auth.SessionManager;
 import com.guardianai.auth.TokenManager;
 import com.guardianai.ui.auth.LoginActivity;
+import com.guardianai.utils.ThemeManager;
 
 public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ThemeManager.applySavedTheme(this);
         super.onCreate(savedInstanceState);
 
         // Register centralized session expiration listener across the app

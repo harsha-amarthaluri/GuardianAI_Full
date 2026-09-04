@@ -63,7 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:background="#1E293B"
+                    android:background="@drawable/bg_score_hero"
                     android:padding="20dp"
                     android:gravity="center"
                     android:layout_marginBottom="14dp">
@@ -119,7 +119,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:background="#1E293B"
+                    android:background="@drawable/bg_card_dark"
                     android:padding="16dp"
                     android:layout_marginBottom="14dp">
 
@@ -146,7 +146,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:background="#1E293B"
+                    android:background="@drawable/bg_card_dark"
                     android:padding="16dp"
                     android:layout_marginBottom="14dp">
 
@@ -183,7 +183,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:background="#1E293B"
+                    android:background="@drawable/bg_card_dark"
                     android:padding="16dp"
                     android:layout_marginBottom="14dp">
 
@@ -219,7 +219,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:background="#1E293B"
+                    android:background="@drawable/bg_card_dark"
                     android:padding="16dp"
                     android:layout_marginBottom="14dp">
 
@@ -244,11 +244,11 @@
                     android:id="@+id/btnTriggerSOS"
                     android:layout_width="match_parent"
                     android:layout_height="64dp"
-                    android:text="EMERGENCY SOS"
+                    android:text="🚨 EMERGENCY SOS"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="#FFFFFF"
-                    android:backgroundTint="#DC2626"
+                    android:background="@drawable/bg_btn_sos"
                     android:layout_marginTop="4dp" />
 
             </LinearLayout>
@@ -588,6 +588,72 @@
                         android:textColor="#FFFFFF" />
                 </LinearLayout>
 
+                <!-- SECTION: APPEARANCE & THEME PREFERENCES -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="APPEARANCE &amp; THEME"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="#38BDF8"
+                    android:layout_marginBottom="8dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_card_dark"
+                    android:padding="16dp"
+                    android:layout_marginBottom="16dp">
+
+                    <TextView
+                        android:id="@+id/textCurrentThemeInfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Active Theme: 🌙 Dark Mode"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp"
+                        android:layout_marginBottom="12dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btnThemeDark"
+                            android:layout_width="0dp"
+                            android:layout_height="42dp"
+                            android:layout_weight="1"
+                            android:text="🌙 Dark"
+                            android:textSize="12sp"
+                            android:backgroundTint="#0EA5E9"
+                            android:textColor="#FFFFFF"
+                            android:layout_marginRight="4dp" />
+
+                        <Button
+                            android:id="@+id/btnThemeLight"
+                            android:layout_width="0dp"
+                            android:layout_height="42dp"
+                            android:layout_weight="1"
+                            android:text="☀️ Light"
+                            android:textSize="12sp"
+                            android:backgroundTint="#475569"
+                            android:textColor="#FFFFFF"
+                            android:layout_marginRight="4dp" />
+
+                        <Button
+                            android:id="@+id/btnThemeSystem"
+                            android:layout_width="0dp"
+                            android:layout_height="42dp"
+                            android:layout_weight="1"
+                            android:text="💻 Auto"
+                            android:textSize="12sp"
+                            android:backgroundTint="#475569"
+                            android:textColor="#FFFFFF" />
+                    </LinearLayout>
+                </LinearLayout>
+
                 <!-- SECTION 4: APPLICATION UPDATES -->
                 <TextView
                     android:layout_width="wrap_content"
@@ -610,7 +676,7 @@
                         android:id="@+id/textAppVersionInfo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Installed Version: v1.0.0 (Build 1)"
+                        android:text="Installed Version: v1.0.0 "
                         android:textColor="#FFFFFF"
                         android:textSize="13sp"
                         android:layout_marginBottom="10dp" />

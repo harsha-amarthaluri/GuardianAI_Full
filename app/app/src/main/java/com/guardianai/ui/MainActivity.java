@@ -29,6 +29,7 @@ import com.guardianai.data.sync.SyncManager;
 import com.guardianai.data.tracking.LocationTrackingService;
 import com.guardianai.data.tracking.TrackingStateManager;
 import com.guardianai.ui.auth.LoginActivity;
+import com.guardianai.utils.ThemeManager;
 import com.guardianai.utils.UpdateManager;
 import com.guardianai.utils.ValidationUtils;
 
@@ -93,8 +94,9 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
     // Settings & Profile Components
     private TextView textProfileName, textProfileEmail, textProfilePhone;
     private EditText editProfileName, editProfilePhone;
-    private TextView textOfflineQueueCount, textAppVersionInfo;
+    private TextView textOfflineQueueCount, textAppVersionInfo, textCurrentThemeInfo;
     private Button btnSaveProfile, btnLogout, btnForceSyncQueue, btnLaunchAiSupport, btnDeleteAccount, btnCheckUpdates;
+    private Button btnThemeDark, btnThemeLight, btnThemeSystem;
 
     // Location State
     private double currentLat = 37.7749;
@@ -102,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ThemeManager.applySavedTheme(this);
         super.onCreate(savedInstanceState);
 
         // Osmdroid Configuration
@@ -239,6 +242,18 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
         btnDeleteAccount = findViewById(R.id.btnDeleteAccount);
         textAppVersionInfo = findViewById(R.id.textAppVersionInfo);
         btnCheckUpdates = findViewById(R.id.btnCheckUpdates);
+
+        textCurrentThemeInfo = findViewById(R.id.textCurrentThemeInfo);
+        btnThemeDark = findViewById(R.id.btnThemeDark);
+        btnThemeLight = findViewById(R.id.btnThemeLight);
+        btnThemeSystem = findViewById(R.id.btnThemeSystem);
+
+        if (btnThemeDark != null && btnThemeLight != null && btnThemeSystem != null) {
+            btnThemeDark.setOnClickListener(v -> updateTheme(ThemeManager.THEME_DARK));
+            btnThemeLight.setOnClickListener(v -> updateTheme(ThemeManager.THEME_LIGHT));
+            btnThemeSystem.setOnClickListener(v -> updateTheme(ThemeManager.THEME_SYSTEM));
+        }
+        updateThemeUI();
 
         // Home Actions
         btnTriggerSOS.setOnClickListener(v -> showSOSConfirmationDialog());
@@ -1087,5 +1102,24 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
                 Toast.makeText(MainActivity.this, "Download failed: " + error, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void updateTheme(int mode) {
+        ThemeManager.setThemeMode(this, mode);
+        updateThemeUI();
+    }
+
+    private void updateThemeUI() {
+        int currentMode = ThemeManager.getThemeMode(this);
+        if (btnThemeDark == null || btnThemeLight == null || btnThemeSystem == null || textCurrentThemeInfo == null) return;
+
+        btnThemeDark.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.parseColor(currentMode == ThemeManager.THEME_DARK ? "#0EA5E9" : "#475569")));
+        btnThemeLight.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.parseColor(currentMode == ThemeManager.THEME_LIGHT ? "#0EA5E9" : "#475569")));
+        btnThemeSystem.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.parseColor(currentMode == ThemeManager.THEME_SYSTEM ? "#0EA5E9" : "#475569")));
+
+        String modeName = "🌙 Dark Mode";
+        if (currentMode == ThemeManager.THEME_LIGHT) modeName = "☀️ Light Mode";
+        if (currentMode == ThemeManager.THEME_SYSTEM) modeName = "💻 Auto System Default";
+        textCurrentThemeInfo.setText("Active Theme: " + modeName);
     }
 }
