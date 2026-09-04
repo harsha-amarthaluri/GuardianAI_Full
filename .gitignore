@@ -42,6 +42,7 @@ output.json
 .externalNativeBuild
 .cxx/
 *.apk
+!Apk/*.apk
 *.aab
 build/
 
