@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    android:padding="16dp"
+    android:layout_marginBottom="8dp">
+
+    <TextView
+        android:id="@+id/textSOSTrigger"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SOS: MANUAL | Status: ALERTING"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textColor="#DC2626"
+        android:layout_marginBottom="4dp" />
+
+    <TextView
+        android:id="@+id/textSOSDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location: 37.7749, -122.4194\nTime: 2026-08-25T10:00:00Z"
+        android:textSize="13sp"
+        android:textColor="#64748B" />
+
+</LinearLayout>

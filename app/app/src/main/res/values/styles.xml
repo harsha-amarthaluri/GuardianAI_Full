@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base Theme -->
+    <style name="Theme.GuardianAI" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent_blue</item>
+        <item name="android:windowBackground">@color/bg_light</item>
+    </style>
+
+    <!-- Header Typography -->
+    <style name="TextAppearance.GuardianAI.Header" parent="TextAppearance.AppCompat.Large">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
+    <!-- Section Heading Typography -->
+    <style name="TextAppearance.GuardianAI.Title" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
+    <!-- Primary Button Style -->
+    <style name="Widget.GuardianAI.Button.Primary" parent="Widget.AppCompat.Button">
+        <item name="android:background">@color/accent_blue</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingHorizontal">20dp</item>
+        <item name="android:paddingVertical">12dp</item>
+    </style>
+
+    <!-- SOS Emergency Button Style -->
+    <style name="Widget.GuardianAI.Button.SOS" parent="Widget.AppCompat.Button">
+        <item name="android:background">@color/risk_critical</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingHorizontal">24dp</item>
+        <item name="android:paddingVertical">16dp</item>
+    </style>
+</resources>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <EditText
+        android:id="@+id/editGuardianName"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Full Name *"
+        android:paddingHorizontal="12dp"
+        android:layout_marginBottom="10dp" />
+
+    <EditText
+        android:id="@+id/editGuardianPhone"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Phone Number *"
+        android:inputType="phone"
+        android:paddingHorizontal="12dp"
+        android:layout_marginBottom="10dp" />
+
+    <EditText
+        android:id="@+id/editGuardianEmail"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Email Address"
+        android:inputType="textEmailAddress"
+        android:paddingHorizontal="12dp"
+        android:layout_marginBottom="10dp" />
+
+    <EditText
+        android:id="@+id/editGuardianRelationship"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Relationship (e.g. Parent, Spouse) *"
+        android:paddingHorizontal="12dp"
+        android:layout_marginBottom="12dp" />
+
+    <CheckBox
+        android:id="@+id/checkGuardianNotify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enable Emergency Alerts for Guardian"
+        android:checked="true" />
+
+</LinearLayout>

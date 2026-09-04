@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgis/postgis:15-3.3
+    container_name: guardian_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: guardian_user
+      POSTGRES_PASSWORD: guardian_password
+      POSTGRES_DB: guardian_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./data/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U guardian_user -d guardian_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: guardian_backend
+    restart: always
+    environment:
+      - ENVIRONMENT=development
+      - DEBUG=True
+      - POSTGRES_SERVER=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=guardian_user
+      - POSTGRES_PASSWORD=guardian_password
+      - POSTGRES_DB=guardian_db
+      - DATABASE_URL=postgresql+asyncpg://guardian_user:guardian_password@postgres:5432/guardian_db
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary Palette -->
+    <color name="primary">#0F172A</color>
+    <color name="primary_dark">#020617</color>
+    <color name="accent_blue">#0EA5E9</color>
+
+    <!-- Risk Colors -->
+    <color name="risk_low">#059669</color>
+    <color name="risk_moderate">#D97706</color>
+    <color name="risk_high">#DC2626</color>
+    <color name="risk_critical">#7F1D1D</color>
+
+    <!-- Neutral & Surface Dark Safety -->
+    <color name="bg_light">#0F172A</color>
+    <color name="surface_card">#1E293B</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#94A3B8</color>
+    <color name="text_muted">#64748B</color>
+    <color name="divider">#334155</color>
+</resources>

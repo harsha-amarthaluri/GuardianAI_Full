@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center"
+    android:background="#FEF2F2">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ACTIVATING EMERGENCY SOS"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#991B1B"
+        android:layout_marginBottom="12dp" />
+
+    <TextView
+        android:id="@+id/textSOSCountdown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3"
+        android:textSize="72sp"
+        android:textStyle="bold"
+        android:textColor="#DC2626"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Emergency incident will be dispatched automatically."
+        android:textSize="13sp"
+        android:textColor="#7F1D1D"
+        android:gravity="center"
+        android:layout_marginBottom="24dp" />
+
+    <Button
+        android:id="@+id/btnCancelSOS"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="CANCEL SOS"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:backgroundTint="#475569" />
+
+</LinearLayout>

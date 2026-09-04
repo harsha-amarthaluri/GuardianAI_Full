@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Guardian AI</string>
+    <string name="welcome_message">Guardian AI Personal Safety</string>
+    <string name="disclaimer_notice">Guardian AI provides threat awareness estimates and does NOT guarantee safety.</string>
+</resources>

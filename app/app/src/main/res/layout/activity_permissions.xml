@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#0F172A"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="System Permissions Setup"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="To provide real-time protection, Guardian AI requires specific device permissions. Your data is encrypted and never shared."
+        android:textSize="13sp"
+        android:textColor="#94A3B8"
+        android:layout_marginBottom="28dp" />
+
+    <!-- Permission Card 1: Location -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#1E293B"
+        android:padding="20dp"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📍 Precise &amp; Background Location"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#38BDF8"
+            android:layout_marginBottom="6dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Required to calculate your live safety score, monitor nearby threat events, and transmit precise GPS coordinates to trusted guardians during an emergency."
+            android:textSize="12sp"
+            android:textColor="#94A3B8"
+            android:layout_marginBottom="14dp" />
+
+        <Button
+            android:id="@+id/btnGrantLocationPermission"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Grant Location Permission"
+            android:backgroundTint="#0EA5E9"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+
+    <!-- Permission Card 2: Notifications -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#1E293B"
+        android:padding="20dp"
+        android:layout_marginBottom="28dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🔔 Safety &amp; Emergency Alerts"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#38BDF8"
+            android:layout_marginBottom="6dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Required to alert you immediately when approaching high-risk zones, severe crime alerts, or emergency guardian updates."
+            android:textSize="12sp"
+            android:textColor="#94A3B8"
+            android:layout_marginBottom="14dp" />
+
+        <Button
+            android:id="@+id/btnGrantNotificationPermission"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Grant Notification Access"
+            android:backgroundTint="#475569"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnContinueSetup"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:text="Continue to Safety Setup"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:backgroundTint="#059669"
+        android:textColor="#FFFFFF" />
+
+</LinearLayout>

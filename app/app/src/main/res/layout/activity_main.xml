@@ -1,0 +1,674 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#0F172A">
+
+    <!-- Top Header Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#020617"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="GUARDIAN AI"
+            android:textColor="#38BDF8"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textHeaderNetworkStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ONLINE"
+            android:textColor="#059669"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:background="#1E293B"
+            android:layout_marginRight="8dp" />
+    </LinearLayout>
+
+    <!-- Main Content Area -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- TAB 1: HOME / DASHBOARD -->
+        <ScrollView
+            android:id="@+id/layoutTabHome"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Safety Score Card -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#1E293B"
+                    android:padding="20dp"
+                    android:gravity="center"
+                    android:layout_marginBottom="14dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CURRENT SAFETY SCORE"
+                        android:textSize="12sp"
+                        android:textColor="#38BDF8"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="6dp" />
+
+                    <TextView
+                        android:id="@+id/textSafetyScore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="85"
+                        android:textSize="56sp"
+                        android:textStyle="bold"
+                        android:textColor="#059669" />
+
+                    <TextView
+                        android:id="@+id/textRiskCategory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="LOW RISK"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="#059669"
+                        android:layout_marginBottom="10dp" />
+
+                    <!-- Factors Breakdown Container -->
+                    <LinearLayout
+                        android:id="@+id/containerSafetyFactors"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginBottom="10dp" />
+
+                    <TextView
+                        android:id="@+id/textScoreDisclaimer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Safety score is a situational awareness estimate. It does NOT guarantee user safety."
+                        android:textSize="11sp"
+                        android:textColor="#94A3B8"
+                        android:gravity="center" />
+                </LinearLayout>
+
+                <!-- Weather & Environment Risk Card -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#1E293B"
+                    android:padding="16dp"
+                    android:layout_marginBottom="14dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Weather &amp; Environmental Risk"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginBottom="6dp" />
+
+                    <TextView
+                        android:id="@+id/textWeatherStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Weather data unavailable\nLive weather intelligence will appear when weather services are connected."
+                        android:textSize="12sp"
+                        android:textColor="#94A3B8" />
+                </LinearLayout>
+
+                <!-- Live Tracking Control Card -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#1E293B"
+                    android:padding="16dp"
+                    android:layout_marginBottom="14dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Continuous Safety Tracking"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginBottom="4dp" />
+
+                    <TextView
+                        android:id="@+id/textTrackingStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Status: ○ STOPPED"
+                        android:textColor="#94A3B8"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="12dp" />
+
+                    <Button
+                        android:id="@+id/btnToggleTracking"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:text="Start Background Tracking"
+                        android:backgroundTint="#059669"
+                        android:textColor="#FFFFFF" />
+                </LinearLayout>
+
+                <!-- Location & Map Preview Card -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#1E293B"
+                    android:padding="16dp"
+                    android:layout_marginBottom="14dp">
+
+                    <TextView
+                        android:id="@+id/textLocationStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Location: Checking permission..."
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp"
+                        android:layout_marginBottom="8dp" />
+
+                    <Button
+                        android:id="@+id/btnRequestLocationPermission"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:text="Grant Location Permission"
+                        android:backgroundTint="#475569"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginBottom="8dp" />
+
+                    <Button
+                        android:id="@+id/btnSubmitLocation"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:text="Submit Location Telemetry"
+                        android:backgroundTint="#0EA5E9"
+                        android:textColor="#FFFFFF" />
+                </LinearLayout>
+
+                <!-- Threat Awareness Summary Card -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#1E293B"
+                    android:padding="16dp"
+                    android:layout_marginBottom="14dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nearby Threat Awareness"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginBottom="8dp" />
+
+                    <LinearLayout
+                        android:id="@+id/containerDashboardThreats"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+                </LinearLayout>
+
+                <!-- PROMINENT EMERGENCY SOS BUTTON -->
+                <Button
+                    android:id="@+id/btnTriggerSOS"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:text="EMERGENCY SOS"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#DC2626"
+                    android:layout_marginTop="4dp" />
+
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- TAB 2: INTERACTIVE MAP & SAFE ROUTE CALCULATOR -->
+        <LinearLayout
+            android:id="@+id/layoutTabMap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <!-- Category Filter & Safe Route Panel -->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#020617"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnFilterAll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:text="All"
+                        android:textSize="11sp"
+                        android:backgroundTint="#0EA5E9"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginRight="6dp" />
+
+                    <Button
+                        android:id="@+id/btnFilterCrime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:text="Crime"
+                        android:textSize="11sp"
+                        android:backgroundTint="#475569"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginRight="6dp" />
+
+                    <Button
+                        android:id="@+id/btnFilterWeather"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:text="Weather"
+                        android:textSize="11sp"
+                        android:backgroundTint="#475569"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginRight="6dp" />
+
+                    <Button
+                        android:id="@+id/btnFilterEnv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:text="Env"
+                        android:textSize="11sp"
+                        android:backgroundTint="#475569"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginRight="6dp" />
+
+                    <Button
+                        android:id="@+id/btnCalcSafeRoute"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:text="🚦 Safe Route"
+                        android:textSize="11sp"
+                        android:backgroundTint="#059669"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginRight="6dp" />
+
+                    <Button
+                        android:id="@+id/btnToggleHeatmap"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:text="🔥 Crime Heatmap"
+                        android:textSize="11sp"
+                        android:backgroundTint="#8B5CF6"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginRight="6dp" />
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <!-- Osmdroid MapView -->
+            <org.osmdroid.views.MapView
+                android:id="@+id/mapView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <!-- TAB 3: GUARDIANS NETWORK -->
+        <LinearLayout
+            android:id="@+id/layoutTabGuardians"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/btnAddGuardian"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:text="+ Add Trusted Guardian"
+                android:backgroundTint="#0EA5E9"
+                android:textColor="#FFFFFF"
+                android:layout_marginBottom="14dp" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:id="@+id/containerGuardianList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </ScrollView>
+        </LinearLayout>
+
+        <!-- TAB 4: SAFETY HISTORY -->
+        <ScrollView
+            android:id="@+id/layoutTabHistory"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/containerHistoryList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </ScrollView>
+
+        <!-- TAB 5: SETTINGS & PROFILE ARCHITECTURE -->
+        <ScrollView
+            android:id="@+id/layoutTabSettings"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- SECTION 1: ACCOUNT & PROFILE -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ACCOUNT &amp; PROFILE"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="#38BDF8"
+                    android:layout_marginBottom="8dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#1E293B"
+                    android:padding="16dp"
+                    android:layout_marginBottom="16dp">
+
+                    <TextView
+                        android:id="@+id/textProfileName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="User Name"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF" />
+
+                    <TextView
+                        android:id="@+id/textProfileEmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="email@example.com"
+                        android:textColor="#94A3B8" />
+
+                    <TextView
+                        android:id="@+id/textProfilePhone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Phone"
+                        android:textColor="#94A3B8" />
+
+                    <EditText
+                        android:id="@+id/editProfileName"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:hint="Full Name"
+                        android:textColorHint="#64748B"
+                        android:textColor="#FFFFFF"
+                        android:background="#0F172A"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="8dp" />
+
+                    <EditText
+                        android:id="@+id/editProfilePhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:hint="Phone Number"
+                        android:textColorHint="#64748B"
+                        android:textColor="#FFFFFF"
+                        android:background="#0F172A"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:layout_marginBottom="12dp" />
+
+                    <Button
+                        android:id="@+id/btnSaveProfile"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:text="Save Profile"
+                        android:backgroundTint="#0EA5E9"
+                        android:textColor="#FFFFFF" />
+                </LinearLayout>
+
+                <!-- SECTION 2: SAFETY & LOCATION SETTINGS -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SAFETY &amp; LOCATION PREFERENCES"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="#38BDF8"
+                    android:layout_marginBottom="8dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#1E293B"
+                    android:padding="16dp"
+                    android:layout_marginBottom="16dp">
+
+                    <CheckBox
+                        android:id="@+id/checkThreatAlerts"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Enable Proactive Threat Alerts"
+                        android:checked="true"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginBottom="8dp" />
+
+                    <CheckBox
+                        android:id="@+id/checkLocationSharing"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Share Live Telemetry with Guardians"
+                        android:checked="true"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:id="@+id/textTrackingFrequencyInfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tracking Interval: 30s update / 20m displacement (Balanced Power Accuracy)"
+                        android:textSize="12sp"
+                        android:textColor="#94A3B8" />
+                </LinearLayout>
+
+                <!-- SECTION 3: ADVANCED DIAGNOSTICS & HELP -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ADVANCED DIAGNOSTICS &amp; SUPPORT"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="#38BDF8"
+                    android:layout_marginBottom="8dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#1E293B"
+                    android:padding="16dp"
+                    android:layout_marginBottom="16dp">
+
+                    <TextView
+                        android:id="@+id/textOfflineQueueCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Room Offline Queue: Checking database..."
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp"
+                        android:layout_marginBottom="6dp" />
+
+                    <TextView
+                        android:id="@+id/textSyncStatusInfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sync Engine: Batch Sync Active (Max 25 items)"
+                        android:textColor="#94A3B8"
+                        android:textSize="12sp"
+                        android:layout_marginBottom="12dp" />
+
+                    <Button
+                        android:id="@+id/btnForceSyncQueue"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:text="Force Trigger Sync"
+                        android:backgroundTint="#475569"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginBottom="8dp" />
+
+                    <Button
+                        android:id="@+id/btnLaunchAiSupport"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:text="🤖 AI Safety Assistant Chatbot"
+                        android:backgroundTint="#0EA5E9"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginBottom="8dp" />
+
+                    <Button
+                        android:id="@+id/btnComputerVisionInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:text="📷 On-Device Computer Vision Architecture"
+                        android:backgroundTint="#475569"
+                        android:textColor="#FFFFFF" />
+                </LinearLayout>
+
+                <!-- PRIVACY & ACCOUNT MANAGEMENT -->
+                <Button
+                    android:id="@+id/btnDeleteAccount"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="Delete Account &amp; Data"
+                    android:backgroundTint="#7F1D1D"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginBottom="8dp" />
+
+                <!-- SIGN OUT BUTTON -->
+                <Button
+                    android:id="@+id/btnLogout"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="Sign Out"
+                    android:backgroundTint="#DC2626"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginTop="8dp" />
+
+            </LinearLayout>
+        </ScrollView>
+
+    </FrameLayout>
+
+    <!-- Bottom Navigation Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#020617"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnNavHome"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Home"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:background="?android:attr/selectableItemBackground" />
+
+        <Button
+            android:id="@+id/btnNavMap"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Map"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:background="?android:attr/selectableItemBackground" />
+
+        <Button
+            android:id="@+id/btnNavGuardians"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Guardians"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:background="?android:attr/selectableItemBackground" />
+
+        <Button
+            android:id="@+id/btnNavHistory"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="History"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:background="?android:attr/selectableItemBackground" />
+
+        <Button
+            android:id="@+id/btnNavSettings"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Settings"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:background="?android:attr/selectableItemBackground" />
+    </LinearLayout>
+
+</LinearLayout>

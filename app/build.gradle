@@ -1,0 +1,14 @@
+// Root-level build file for Guardian AI Android project
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.2.2'
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

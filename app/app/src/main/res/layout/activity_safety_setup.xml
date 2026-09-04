@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#0F172A"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Personal Safety Configuration"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Configure your initial safety alert preferences and emergency response thresholds."
+        android:textSize="13sp"
+        android:textColor="#94A3B8"
+        android:layout_marginBottom="28dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#1E293B"
+        android:padding="20dp"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Risk Alert Threshold"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="#38BDF8"
+            android:layout_marginBottom="10dp" />
+
+        <RadioGroup
+            android:id="@+id/groupRiskThreshold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            
+            <RadioButton
+                android:id="@+id/radioModerate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Alert on Moderate Risk (Score &lt; 80)"
+                android:checked="true"
+                android:textColor="#FFFFFF" />
+
+            <RadioButton
+                android:id="@+id/radioHigh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Alert on High Risk Only (Score &lt; 60)"
+                android:textColor="#FFFFFF" />
+        </RadioGroup>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#1E293B"
+        android:padding="20dp"
+        android:layout_marginBottom="28dp">
+
+        <CheckBox
+            android:id="@+id/checkAutoShareSOS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Automatically broadcast live location to guardians on SOS"
+            android:checked="true"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="10dp" />
+
+        <CheckBox
+            android:id="@+id/checkLowBatteryAlert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Alert guardians if battery drops below 15%"
+            android:checked="true"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnFinishSetup"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:text="Complete Setup &amp; Launch App"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:backgroundTint="#0EA5E9"
+        android:textColor="#FFFFFF" />
+
+</LinearLayout>

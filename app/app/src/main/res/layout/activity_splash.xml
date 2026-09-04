@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#0F172A"
+    android:padding="32dp">
+
+    <TextView
+        android:id="@+id/textSplashTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GUARDIAN AI"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:textColor="#38BDF8"
+        android:letterSpacing="0.1"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/textSplashSubtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Proactive Personal Safety Platform"
+        android:textSize="14sp"
+        android:textColor="#94A3B8"
+        android:layout_marginBottom="48dp" />
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="#38BDF8" />
+
+</LinearLayout>
