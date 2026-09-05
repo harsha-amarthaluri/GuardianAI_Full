@@ -1,30 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Base Theme -->
+    <!-- Base Warm Minimalist Theme -->
     <style name="Theme.GuardianAI" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimary">@color/accent_terracotta</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
-        <item name="colorAccent">@color/accent_blue</item>
+        <item name="colorAccent">@color/accent_terracotta</item>
         <item name="android:windowBackground">@color/bg_light</item>
     </style>
 
-    <!-- Header Typography -->
+    <!-- Large Header Typography -->
     <style name="TextAppearance.GuardianAI.Header" parent="TextAppearance.AppCompat.Large">
-        <item name="android:textSize">24sp</item>
+        <item name="android:textSize">26sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/text_primary</item>
     </style>
 
     <!-- Section Heading Typography -->
     <style name="TextAppearance.GuardianAI.Title" parent="TextAppearance.AppCompat.Medium">
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/text_primary</item>
     </style>
 
-    <!-- Primary Button Style -->
+    <!-- Subtitle Typography -->
+    <style name="TextAppearance.GuardianAI.Subtitle" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <!-- Terracotta Pill Button Style -->
     <style name="Widget.GuardianAI.Button.Primary" parent="Widget.AppCompat.Button">
-        <item name="android:background">@color/accent_blue</item>
+        <item name="android:background">@drawable/bg_btn_primary</item>
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
@@ -34,11 +40,31 @@
 
     <!-- SOS Emergency Button Style -->
     <style name="Widget.GuardianAI.Button.SOS" parent="Widget.AppCompat.Button">
-        <item name="android:background">@color/risk_critical</item>
+        <item name="android:background">@drawable/bg_btn_sos</item>
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:paddingHorizontal">24dp</item>
         <item name="android:paddingVertical">16dp</item>
+    </style>
+
+    <!-- Category Pill Style (Inactive) -->
+    <style name="Widget.GuardianAI.Chip.Inactive" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/bg_chip_inactive</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingHorizontal">18dp</item>
+        <item name="android:paddingVertical">8dp</item>
+    </style>
+
+    <!-- Category Pill Style (Active) -->
+    <style name="Widget.GuardianAI.Chip.Active" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/bg_chip_active</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingHorizontal">18dp</item>
+        <item name="android:paddingVertical">8dp</item>
     </style>
 </resources>

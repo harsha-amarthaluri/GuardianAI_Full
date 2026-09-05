@@ -1,6 +1,7 @@
 {
-  "versionCode": 3,
-  "versionName": "1.0.2",
+  "versionCode": 4,
+  "versionName": "1.0.3",
   "downloadUrl": "https://raw.githubusercontent.com/harsha-amarthaluri/GuardianAI_Full/refs/heads/main/Apk/app-debug.apk",
-  "changelog": "• New minimal Women Safety app icon & launcher logo\n• UI redesign with custom gradient drawables\n• Theme Manager (Dark/Light mode selection in Settings)\n• In-app update checker and progress download"
+  "sha256": "cb49fa9203862e87961e75652349a2be2146f17de7aa3e0b0c650a59c623dea4",
+  "changelog": "• Release v1.0.3 (Build 4)\n• Complete UI Redesign inspired by warm minimalist aesthetic\n• Floating capsule pill bottom navigation bar\n• Real-time FCM emergency notification dispatch\n• SHA-256 cryptographic update integrity validation"
 }

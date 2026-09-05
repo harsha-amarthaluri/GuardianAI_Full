@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="#0F172A">
+    android:background="@color/bg_light">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:text="Create Account"
             android:textSize="28sp"
             android:textStyle="bold"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/text_primary"
             android:layout_marginBottom="4dp" />
 
         <TextView
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:text="Register to start using proactive Guardian AI protection"
             android:textSize="14sp"
-            android:textColor="#94A3B8"
+            android:textColor="@color/text_secondary"
             android:layout_marginBottom="28dp" />
 
         <!-- Full Name -->
@@ -36,7 +36,7 @@
             android:text="Full Name *"
             android:textSize="12sp"
             android:textStyle="bold"
-            android:textColor="#38BDF8"
+            android:textColor="@color/text_primary"
             android:layout_marginBottom="4dp" />
 
         <EditText
@@ -44,12 +44,11 @@
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:hint="Jane Doe"
-            android:textColorHint="#64748B"
+            android:textColorHint="@color/text_muted"
             android:inputType="textPersonName"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:background="#1E293B"
-            android:textColor="#FFFFFF"
+            android:paddingHorizontal="16dp"
+            android:background="@drawable/bg_search_input"
+            android:textColor="@color/text_primary"
             android:layout_marginBottom="14dp" />
 
         <!-- Email -->
@@ -59,7 +58,7 @@
             android:text="Email Address *"
             android:textSize="12sp"
             android:textStyle="bold"
-            android:textColor="#38BDF8"
+            android:textColor="@color/text_primary"
             android:layout_marginBottom="4dp" />
 
         <EditText
@@ -67,12 +66,11 @@
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:hint="jane.doe@example.com"
-            android:textColorHint="#64748B"
+            android:textColorHint="@color/text_muted"
             android:inputType="textEmailAddress"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:background="#1E293B"
-            android:textColor="#FFFFFF"
+            android:paddingHorizontal="16dp"
+            android:background="@drawable/bg_search_input"
+            android:textColor="@color/text_primary"
             android:layout_marginBottom="14dp" />
 
         <!-- Phone Number -->
@@ -82,7 +80,7 @@
             android:text="Phone Number"
             android:textSize="12sp"
             android:textStyle="bold"
-            android:textColor="#38BDF8"
+            android:textColor="@color/text_primary"
             android:layout_marginBottom="4dp" />
 
         <EditText
@@ -90,12 +88,11 @@
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:hint="+1234567890"
-            android:textColorHint="#64748B"
+            android:textColorHint="@color/text_muted"
             android:inputType="phone"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:background="#1E293B"
-            android:textColor="#FFFFFF"
+            android:paddingHorizontal="16dp"
+            android:background="@drawable/bg_search_input"
+            android:textColor="@color/text_primary"
             android:layout_marginBottom="14dp" />
 
         <!-- Password -->
@@ -105,7 +102,7 @@
             android:text="Password (min 8 chars) *"
             android:textSize="12sp"
             android:textStyle="bold"
-            android:textColor="#38BDF8"
+            android:textColor="@color/text_primary"
             android:layout_marginBottom="4dp" />
 
         <EditText
@@ -113,12 +110,11 @@
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:hint="••••••••"
-            android:textColorHint="#64748B"
+            android:textColorHint="@color/text_muted"
             android:inputType="textPassword"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:background="#1E293B"
-            android:textColor="#FFFFFF"
+            android:paddingHorizontal="16dp"
+            android:background="@drawable/bg_search_input"
+            android:textColor="@color/text_primary"
             android:layout_marginBottom="14dp" />
 
         <!-- Confirm Password -->
@@ -128,7 +124,7 @@
             android:text="Confirm Password *"
             android:textSize="12sp"
             android:textStyle="bold"
-            android:textColor="#38BDF8"
+            android:textColor="@color/text_primary"
             android:layout_marginBottom="4dp" />
 
         <EditText
@@ -136,19 +132,18 @@
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:hint="••••••••"
-            android:textColorHint="#64748B"
+            android:textColorHint="@color/text_muted"
             android:inputType="textPassword"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:background="#1E293B"
-            android:textColor="#FFFFFF"
+            android:paddingHorizontal="16dp"
+            android:background="@drawable/bg_search_input"
+            android:textColor="@color/text_primary"
             android:layout_marginBottom="16dp" />
 
         <TextView
             android:id="@+id/textRegError"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#EF4444"
+            android:textColor="#E11D48"
             android:textSize="13sp"
             android:visibility="gone"
             android:layout_marginBottom="16dp" />
@@ -158,7 +153,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:indeterminateTint="#38BDF8"
+            android:indeterminateTint="@color/accent_terracotta"
             android:visibility="gone"
             android:layout_marginBottom="16dp" />
 
@@ -170,7 +165,7 @@
             android:textColor="#FFFFFF"
             android:textStyle="bold"
             android:textSize="16sp"
-            android:backgroundTint="#0EA5E9"
+            android:background="@drawable/bg_btn_primary"
             android:layout_marginBottom="24dp" />
 
         <TextView
@@ -178,7 +173,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Already have an account? Sign in"
-            android:textColor="#38BDF8"
+            android:textColor="@color/accent_terracotta"
+            android:textStyle="bold"
             android:textSize="14sp"
             android:layout_gravity="center" />
 

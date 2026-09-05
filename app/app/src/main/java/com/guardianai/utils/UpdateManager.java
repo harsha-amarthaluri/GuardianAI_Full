@@ -16,11 +16,13 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.MessageDigest;
 import java.util.concurrent.Executors;
 
 public class UpdateManager {
@@ -31,18 +33,21 @@ public class UpdateManager {
         private final int versionCode;
         private final String versionName;
         private final String downloadUrl;
+        private final String sha256;
         private final String changelog;
 
-        public UpdateInfo(int versionCode, String versionName, String downloadUrl, String changelog) {
+        public UpdateInfo(int versionCode, String versionName, String downloadUrl, String sha256, String changelog) {
             this.versionCode = versionCode;
             this.versionName = versionName;
             this.downloadUrl = downloadUrl;
+            this.sha256 = sha256;
             this.changelog = changelog;
         }
 
         public int getVersionCode() { return versionCode; }
         public String getVersionName() { return versionName; }
         public String getDownloadUrl() { return downloadUrl; }
+        public String getSha256() { return sha256; }
         public String getChangelog() { return changelog; }
     }
 
@@ -83,9 +88,10 @@ public class UpdateManager {
                     int remoteVersionCode = json.optInt("versionCode", 1);
                     String remoteVersionName = json.optString("versionName", "1.0.0");
                     String downloadUrl = json.optString("downloadUrl", "");
+                    String sha256 = json.optString("sha256", "");
                     String changelog = json.optString("changelog", "Performance improvements & bug fixes.");
 
-                    UpdateInfo info = new UpdateInfo(remoteVersionCode, remoteVersionName, downloadUrl, changelog);
+                    UpdateInfo info = new UpdateInfo(remoteVersionCode, remoteVersionName, downloadUrl, sha256, changelog);
 
                     mainHandler.post(() -> {
                         if (remoteVersionCode > currentCode) {
@@ -103,7 +109,7 @@ public class UpdateManager {
         });
     }
 
-    public static void downloadAndInstallApk(Activity activity, String downloadUrl, ProgressCallback callback) {
+    public static void downloadAndInstallApk(Activity activity, String downloadUrl, String expectedSha256, ProgressCallback callback) {
         Executors.newSingleThreadExecutor().execute(() -> {
             Handler mainHandler = new Handler(Looper.getMainLooper());
             try {
@@ -144,6 +150,16 @@ public class UpdateManager {
                 output.close();
                 input.close();
 
+                // SHA-256 Checksum Validation
+                if (expectedSha256 != null && !expectedSha256.trim().isEmpty()) {
+                    String actualSha256 = calculateSha256(targetFile);
+                    if (actualSha256 == null || !actualSha256.equalsIgnoreCase(expectedSha256.trim())) {
+                        targetFile.delete();
+                        mainHandler.post(() -> callback.onError("APK Integrity Check Failed! SHA-256 hash mismatch. Update installation aborted for security."));
+                        return;
+                    }
+                }
+
                 mainHandler.post(() -> {
                     callback.onDownloadComplete(targetFile);
                     installApk(activity, targetFile);
@@ -153,6 +169,27 @@ public class UpdateManager {
                 mainHandler.post(() -> callback.onError("Download failed: " + e.getLocalizedMessage()));
             }
         });
+    }
+
+    public static String calculateSha256(File file) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            FileInputStream fis = new FileInputStream(file);
+            byte[] buffer = new byte[8192];
+            int count;
+            while ((count = fis.read(buffer)) != -1) {
+                digest.update(buffer, 0, count);
+            }
+            fis.close();
+            byte[] hashBytes = digest.digest();
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashBytes) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public static void installApk(Activity activity, File apkFile) {

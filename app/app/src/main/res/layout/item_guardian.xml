@@ -3,10 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:background="#FFFFFF"
+    android:background="@drawable/bg_card_white"
     android:padding="16dp"
     android:gravity="center_vertical"
-    android:layout_marginBottom="8dp">
+    android:layout_marginBottom="10dp">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -21,7 +21,7 @@
             android:text="Guardian Name"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="#0F172A" />
+            android:textColor="@color/text_primary" />
 
         <TextView
             android:id="@+id/textGuardianDetails"
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:text="Phone | Email"
             android:textSize="13sp"
-            android:textColor="#64748B" />
+            android:textColor="@color/text_secondary" />
     </LinearLayout>
 
     <Button
@@ -38,9 +38,10 @@
         android:layout_height="36dp"
         android:text="Edit"
         android:textSize="12sp"
-        android:backgroundTint="#0EA5E9"
+        android:textStyle="bold"
+        android:background="@drawable/bg_btn_primary"
         android:textColor="#FFFFFF"
-        android:layout_marginEnd="4dp" />
+        android:layout_marginEnd="6dp" />
 
     <Button
         android:id="@+id/btnDeleteGuardian"
@@ -48,7 +49,8 @@
         android:layout_height="36dp"
         android:text="Del"
         android:textSize="12sp"
-        android:backgroundTint="#EF4444"
+        android:textStyle="bold"
+        android:background="@drawable/bg_btn_sos"
         android:textColor="#FFFFFF" />
 
 </LinearLayout>

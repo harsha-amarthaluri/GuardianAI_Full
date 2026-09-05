@@ -116,8 +116,8 @@ This repository includes a [`render.yaml`](render.yaml) Blueprint for zero-confi
 ### 14-Minute Ping Keep-Alive Cron
 Render's free tier spins down web services after 15 minutes of inactivity. To prevent cold starts and maintain 24/7 responsiveness:
 
-- **GitHub Actions Cron Ping**: Automated workflow [`.github/workflows/keepalive.yml`](.github/workflows/keepalive.yml) runs every **14 minutes** (`*/14 * * * *`), sending an HTTP ping to keep the service warm. Set secret `RENDER_BACKEND_URL` in your GitHub repository settings.
-- **Python Keep-Alive Script**: Run `python scripts/ping_keepalive.py --url https://<your-app>.onrender.com/health` as a daemon on any server or machine. Single pings can be tested with `--once`.
+- **Native Render Cron Job**: Configured directly in [`render.yaml`](render.yaml) (`type: cron`, schedule `*/14 * * * *`), automatically sending a health check ping to keep the backend warm directly on Render.
+- **Python Keep-Alive Script**: Run `python scripts/ping_keepalive.py --url https://<your-app>.onrender.com/health` manually or as a daemon. Single pings can be tested with `--once`.
 
 ---
 

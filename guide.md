@@ -85,7 +85,7 @@ If you are creating the Web Service manually on Render via the Web Dashboard (**
    | :--- | :--- | :--- |
    | `ENVIRONMENT` | `production` | Enables production mode |
    | `SECRET_KEY` | `<your-secret-key>` | JWT signing secret key |
-   | `DATABASE_URL` | `postgresql://postgres.xdtvthdlxdpixhnsaeah:.%23Ccf*b%236y-Drzc@aws-0-ap-south-1.pooler.supabase.com:6543/postgres` | **Must use Supabase IPv4 Pooler URL** (Port `6543`) |
+   | `DATABASE_URL` | `postgresql://postgres.[project-ref]:<YOUR-SUPABASE-PASSWORD>@aws-0-[region].pooler.supabase.com:6543/postgres` | **Must use Supabase IPv4 Pooler URL** (Port `6543`) |
 
 > [!NOTE]
 > **Why IPv4 Pooler is required on Render**: Render free-tier instances do not support outbound IPv6. Direct Supabase URLs (`db.[ref].supabase.co:5432`) resolve to IPv6-only, causing `Network is unreachable` errors. The Supabase IPv4 Pooler connection string (`aws-0-[region].pooler.supabase.com:6543` with username `postgres.[project_ref]`) resolves to IPv4 and connects seamlessly.
@@ -111,15 +111,12 @@ This ensures your PostgreSQL tables and schemas are created/updated before the s
 
 Render free web services spin down after **15 minutes** of inactivity, causing cold-start delays on initial user requests. To keep your backend active 24/7, use one of the ping mechanisms below.
 
-### Option A: GitHub Actions Automated Cron Ping (Automated & Cloud-Based)
-The repository includes a GitHub Action workflow [`.github/workflows/keepalive.yml`](.github/workflows/keepalive.yml) configured to run every **14 minutes** (`*/14 * * * *`).
+### Option A: Native Render Cron Job (Recommended)
+The repository [`render.yaml`](render.yaml) blueprint includes a native Render Cron Job configured to run every **14 minutes** (`*/14 * * * *`).
 
-1. Copy your deployed Render URL (e.g. `https://guardian-ai-backend.onrender.com`).
-2. Go to your GitHub repository **Settings > Secrets and variables > Actions**.
-3. Click **New repository secret**:
-   - **Name**: `RENDER_BACKEND_URL`
-   - **Value**: `https://guardian-ai-backend.onrender.com/health`
-4. GitHub Actions will now ping your backend every 14 minutes automatically.
+1. Deploy using Render Blueprint (`render.yaml`).
+2. Render will automatically provision both the `guardian-ai-backend` Web Service and the `guardian-ai-keepalive-cron` Cron Job.
+3. The cron job automatically executes `python scripts/ping_keepalive.py --once --url https://gai-backend-ylzf.onrender.com/health` every 14 minutes directly inside Render.
 
 ### Option B: Local Python Keep-Alive Daemon
 You can run the included Python script [`scripts/ping_keepalive.py`](scripts/ping_keepalive.py) continuously on any server or machine:

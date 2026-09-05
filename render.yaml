@@ -16,8 +16,9 @@ services:
       - key: SECRET_KEY
         generateValue: true
 
-# Optional: Uncomment below if attaching a Render PostgreSQL instance
-# databases:
-#   - name: guardian-db
-#     databaseName: guardian_db
-#     user: guardian_user
+  - type: cron
+    name: guardian-ai-keepalive-cron
+    runtime: python
+    schedule: "*/14 * * * *"
+    buildCommand: pip install requests
+    startCommand: python scripts/ping_keepalive.py --once --url https://gai-backend-ylzf.onrender.com/health

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="#0F172A">
+    android:background="@color/bg_light">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:text="Welcome Back"
             android:textSize="28sp"
             android:textStyle="bold"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/text_primary"
             android:layout_marginBottom="4dp" />
 
         <TextView
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:text="Sign in to access your personal safety command center"
             android:textSize="14sp"
-            android:textColor="#94A3B8"
+            android:textColor="@color/text_secondary"
             android:layout_marginBottom="36dp" />
 
         <TextView
@@ -35,7 +35,7 @@
             android:text="Email Address"
             android:textSize="12sp"
             android:textStyle="bold"
-            android:textColor="#38BDF8"
+            android:textColor="@color/text_primary"
             android:layout_marginBottom="6dp" />
 
         <EditText
@@ -43,12 +43,11 @@
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:hint="user@example.com"
-            android:textColorHint="#64748B"
+            android:textColorHint="@color/text_muted"
             android:inputType="textEmailAddress"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:background="@drawable/bg_input_dark"
-            android:textColor="#FFFFFF"
+            android:paddingHorizontal="16dp"
+            android:background="@drawable/bg_search_input"
+            android:textColor="@color/text_primary"
             android:layout_marginBottom="20dp" />
 
         <TextView
@@ -57,7 +56,7 @@
             android:text="Password"
             android:textSize="12sp"
             android:textStyle="bold"
-            android:textColor="#38BDF8"
+            android:textColor="@color/text_primary"
             android:layout_marginBottom="6dp" />
 
         <EditText
@@ -65,12 +64,11 @@
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:hint="••••••••"
-            android:textColorHint="#64748B"
+            android:textColorHint="@color/text_muted"
             android:inputType="textPassword"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:background="@drawable/bg_input_dark"
-            android:textColor="#FFFFFF"
+            android:paddingHorizontal="16dp"
+            android:background="@drawable/bg_search_input"
+            android:textColor="@color/text_primary"
             android:layout_marginBottom="16dp" />
 
         <TextView
@@ -78,7 +76,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Forgot Password?"
-            android:textColor="#38BDF8"
+            android:textColor="@color/accent_terracotta"
+            android:textStyle="bold"
             android:textSize="13sp"
             android:layout_gravity="end"
             android:layout_marginBottom="24dp" />
@@ -87,7 +86,7 @@
             android:id="@+id/textError"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#EF4444"
+            android:textColor="#E11D48"
             android:textSize="13sp"
             android:visibility="gone"
             android:layout_marginBottom="16dp" />
@@ -97,7 +96,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:indeterminateTint="#38BDF8"
+            android:indeterminateTint="@color/accent_terracotta"
             android:visibility="gone"
             android:layout_marginBottom="16dp" />
 
@@ -117,7 +116,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Don't have an account? Register here"
-            android:textColor="#38BDF8"
+            android:textColor="@color/accent_terracotta"
+            android:textStyle="bold"
             android:textSize="14sp"
             android:layout_gravity="center" />
 

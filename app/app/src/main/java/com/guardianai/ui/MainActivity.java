@@ -322,6 +322,12 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
         layoutTabHistory.setVisibility(tabIndex == 3 ? View.VISIBLE : View.GONE);
         layoutTabSettings.setVisibility(tabIndex == 4 ? View.VISIBLE : View.GONE);
 
+        if (btnNavHome != null) btnNavHome.setBackgroundResource(tabIndex == 0 ? R.drawable.bg_nav_active_circle : 0);
+        if (btnNavMap != null) btnNavMap.setBackgroundResource(tabIndex == 1 ? R.drawable.bg_nav_active_circle : 0);
+        if (btnNavGuardians != null) btnNavGuardians.setBackgroundResource(tabIndex == 2 ? R.drawable.bg_nav_active_circle : 0);
+        if (btnNavHistory != null) btnNavHistory.setBackgroundResource(tabIndex == 3 ? R.drawable.bg_nav_active_circle : 0);
+        if (btnNavSettings != null) btnNavSettings.setBackgroundResource(tabIndex == 4 ? R.drawable.bg_nav_active_circle : 0);
+
         if (tabIndex == 0) loadHomeData();
         if (tabIndex == 1) loadMapData();
         if (tabIndex == 2) loadGuardiansData();
@@ -1041,7 +1047,7 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
                 new AlertDialog.Builder(MainActivity.this)
                         .setTitle("🎉 Update Available! (v" + info.getVersionName() + ")")
                         .setMessage("A new version of Guardian AI is available.\n\nCurrent Version: Build " + currentVersionCode + "\nLatest Version: Build " + info.getVersionCode() + "\n\nChangelog:\n" + info.getChangelog())
-                        .setPositiveButton("Update Now", (dialog, which) -> downloadAndInstallUpdate(info.getDownloadUrl()))
+                        .setPositiveButton("Update Now", (dialog, which) -> downloadAndInstallUpdate(info.getDownloadUrl(), info.getSha256()))
                         .setNegativeButton("Later", null)
                         .show();
             }
@@ -1064,7 +1070,7 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
         });
     }
 
-    private void downloadAndInstallUpdate(String downloadUrl) {
+    private void downloadAndInstallUpdate(String downloadUrl, String sha256) {
         if (downloadUrl == null || downloadUrl.isEmpty()) {
             Toast.makeText(this, "Invalid download URL.", Toast.LENGTH_SHORT).show();
             return;
@@ -1079,7 +1085,7 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
         downloadProgress.setCancelable(false);
         downloadProgress.show();
 
-        UpdateManager.downloadAndInstallApk(this, downloadUrl, new UpdateManager.ProgressCallback() {
+        UpdateManager.downloadAndInstallApk(this, downloadUrl, sha256, new UpdateManager.ProgressCallback() {
             @Override
             public void onProgress(int progress, long downloadedBytes, long totalBytes) {
                 if (progress >= 0) {
