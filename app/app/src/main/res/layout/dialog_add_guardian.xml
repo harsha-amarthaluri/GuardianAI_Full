@@ -3,47 +3,79 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:padding="24dp"
+    android:background="@drawable/bg_card_white">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🛡️ Add Trusted Guardian"
+        android:textColor="#0F172A"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="16dp"
+        android:text="Guardians receive priority push alerts and live GPS tracking during SOS events."
+        android:textColor="#64748B"
+        android:textSize="13sp" />
 
     <EditText
         android:id="@+id/editGuardianName"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:layout_marginBottom="10dp"
+        android:background="#F1F5F9"
         android:hint="Full Name *"
-        android:paddingHorizontal="12dp"
-        android:layout_marginBottom="10dp" />
+        android:paddingHorizontal="14dp"
+        android:textColor="#0F172A"
+        android:textSize="14sp" />
 
     <EditText
         android:id="@+id/editGuardianPhone"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:layout_marginBottom="10dp"
+        android:background="#F1F5F9"
         android:hint="Phone Number *"
         android:inputType="phone"
-        android:paddingHorizontal="12dp"
-        android:layout_marginBottom="10dp" />
+        android:paddingHorizontal="14dp"
+        android:textColor="#0F172A"
+        android:textSize="14sp" />
 
     <EditText
         android:id="@+id/editGuardianEmail"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:layout_marginBottom="10dp"
+        android:background="#F1F5F9"
         android:hint="Email Address"
         android:inputType="textEmailAddress"
-        android:paddingHorizontal="12dp"
-        android:layout_marginBottom="10dp" />
+        android:paddingHorizontal="14dp"
+        android:textColor="#0F172A"
+        android:textSize="14sp" />
 
     <EditText
         android:id="@+id/editGuardianRelationship"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:layout_marginBottom="12dp"
+        android:background="#F1F5F9"
         android:hint="Relationship (e.g. Parent, Spouse) *"
-        android:paddingHorizontal="12dp"
-        android:layout_marginBottom="12dp" />
+        android:paddingHorizontal="14dp"
+        android:textColor="#0F172A"
+        android:textSize="14sp" />
 
     <CheckBox
         android:id="@+id/checkGuardianNotify"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:checked="true"
         android:text="Enable Emergency Alerts for Guardian"
-        android:checked="true" />
+        android:textColor="#334155"
+        android:textSize="13sp" />
 
 </LinearLayout>

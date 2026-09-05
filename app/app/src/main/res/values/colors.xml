@@ -1,34 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Primary Palette (Terracotta Warm Minimalist Aesthetic) -->
-    <color name="primary">#1C1917</color>
-    <color name="primary_dark">#12100E</color>
+    <!-- Primary Brand Palette (Modern Guardian AI Aesthetic) -->
+    <color name="primary">#0F172A</color>
+    <color name="primary_dark">#020617</color>
+    <color name="accent_blue">#0284C7</color>
+    <color name="accent_blue_dark">#0369A1</color>
+    <color name="accent_blue_light">#E0F2FE</color>
+
+    <!-- Emergency & Safety Accent Colors -->
     <color name="accent_terracotta">#8C4A28</color>
-    <color name="accent_terracotta_light">#A35932</color>
-    <color name="accent_terracotta_soft">#F4ECE7</color>
+    <color name="emergency_red">#DC2626</color>
+    <color name="emergency_red_dark">#991B1B</color>
+    <color name="emergency_red_soft">#FEE2E2</color>
 
     <!-- Risk Level Colors -->
-    <color name="risk_low">#10B981</color>
-    <color name="risk_moderate">#F59E0B</color>
-    <color name="risk_high">#E11D48</color>
+    <color name="risk_low">#059669</color>
+    <color name="risk_moderate">#D97706</color>
+    <color name="risk_high">#DC2626</color>
     <color name="risk_critical">#991B1B</color>
 
     <!-- Backgrounds & Surfaces -->
-    <color name="bg_light">#F6F4EE</color>
-    <color name="bg_dark">#12100E</color>
+    <color name="bg_light">#F8FAFC</color>
+    <color name="bg_dark">#0F172A</color>
     <color name="surface_card">#FFFFFF</color>
-    <color name="surface_card_dark">#1C1917</color>
-    <color name="surface_pill">#EBE7DF</color>
-    <color name="surface_pill_dark">#2A2725</color>
-    <color name="search_input_bg">#EBE7DF</color>
+    <color name="surface_card_dark">#1E293B</color>
+    <color name="surface_pill">#F1F5F9</color>
+    <color name="surface_pill_dark">#334155</color>
+    <color name="search_input_bg">#F1F5F9</color>
 
     <!-- Typography Colors -->
-    <color name="text_primary">#1C1917</color>
-    <color name="text_secondary">#78716C</color>
-    <color name="text_muted">#A8A29E</color>
+    <color name="text_primary">#0F172A</color>
+    <color name="text_secondary">#475569</color>
+    <color name="text_muted">#94A3B8</color>
     <color name="text_white">#FFFFFF</color>
-    <color name="divider">#E8E4DC</color>
+    <color name="divider">#E2E8F0</color>
 
     <!-- Legacy / Compatibility Aliases -->
-    <color name="accent_blue">#8C4A28</color>
+    <color name="accent_terracotta_light">#A35932</color>
+    <color name="accent_terracotta_soft">#F4ECE7</color>
 </resources>

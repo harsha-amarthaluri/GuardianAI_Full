@@ -1,7 +1,7 @@
 {
-  "versionCode": 6,
-  "versionName": "1.0.5",
+  "versionCode": 11,
+  "versionName": "1.1.0",
   "downloadUrl": "https://raw.githubusercontent.com/harsha-amarthaluri/GuardianAI_Full/refs/heads/main/Apk/app-debug.apk",
-  "sha256": "9272850191c62a8a4c23dd43c00eb2f2b415f9fa21145015edf3c4d9a0a47335",
-  "changelog": "• Release v1.0.5 (Build 6)\n• Active Safe Journey UI Protection Card wired to backend Journey Engine\n• Live destination & arrival ETA tracking with TRAVEL frequency mode\n• Real FCM Cloud Messaging token registration & push alerts\n• Central Emergency Response Decision Engine\n• Interactive SOS Incident Audit Trail Timeline Modal\n• Dynamic Threat Map Overlay Pins & Environmental Risk Engine"
+  "sha256": "a129a66704ebb4b8c3b92d037ec28e8dbbd28b09aaa47776dfda952c8b16fb45",
+  "changelog": "• Release v1.1.0 (Build 11)\n• Dynamic Theme Engine with automatic res/values-night Dark Mode & Light Mode resources\n• Perfect High-Contrast Text & Visibility: Rich Slate Dark (#0B0F17) & Elevated Slate Cards (#1E293B) in Night Mode\n• Automatic Card Surface (@color/surface_card) & Search Input (@color/search_input_bg) Adaptation\n• Instant dynamic theme switching via ThemeManager (Dark / Light / System Default)"
 }

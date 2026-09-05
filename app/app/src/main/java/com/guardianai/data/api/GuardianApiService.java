@@ -103,4 +103,32 @@ public interface GuardianApiService {
 
     @POST("api/v1/journeys/{id}/complete")
     Call<JourneyDto> completeJourney(@Path("id") String journeyId);
+
+    // AI Support Assistant Endpoint
+    @POST("api/v1/chat/message")
+    Call<FeatureDtos.ChatResponseDto> sendChatMessage(@Body FeatureDtos.ChatRequestDto request);
+
+    // Safety Check-in Timer Endpoints
+    @POST("api/v1/checkin/start")
+    Call<FeatureDtos.CheckInResponseDto> startCheckIn(@Body FeatureDtos.CheckInRequestDto request);
+
+    @GET("api/v1/checkin/status")
+    Call<FeatureDtos.CheckInResponseDto> getCheckInStatus();
+
+    @POST("api/v1/checkin/safe")
+    Call<FeatureDtos.CheckInResponseDto> checkInSafe();
+
+    // Nearby Safe Places Endpoint
+    @GET("api/v1/locations/safe-places")
+    Call<FeatureDtos.SafePlacesResponseDto> getNearbySafePlaces(
+            @Query("latitude") double latitude,
+            @Query("longitude") double longitude
+    );
+
+    // User Settings Endpoints
+    @GET("api/v1/users/settings")
+    Call<FeatureDtos.UserSettingsDto> getUserSettings();
+
+    @PUT("api/v1/users/settings")
+    Call<FeatureDtos.UserSettingsDto> updateUserSettings(@Body FeatureDtos.UserSettingsDto settings);
 }

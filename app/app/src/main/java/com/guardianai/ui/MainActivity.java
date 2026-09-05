@@ -407,6 +407,13 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
         };
 
         if (hasLocationPermission()) {
+            try {
+                mainFusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+                    if (location != null) {
+                        onLocationAcquired(location);
+                    }
+                });
+            } catch (SecurityException ignored) {}
             startLocationUpdatesClient();
         }
     }
@@ -414,8 +421,8 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
     private void startLocationUpdatesClient() {
         if (!hasLocationPermission()) return;
         try {
-            LocationRequest req = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000)
-                    .setMinUpdateIntervalMillis(5000)
+            LocationRequest req = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000)
+                    .setMinUpdateIntervalMillis(2000)
                     .build();
             mainFusedLocationClient.requestLocationUpdates(req, mainLocationCallback, Looper.getMainLooper());
         } catch (SecurityException ignored) {}
@@ -435,9 +442,9 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
             textMapStateBanner.setText(String.format(Locale.US, "🟢 GPS ACTIVE • Acc: %.0fm • %s", accuracy, timeStr));
         }
 
-        if (isAutoFollowEnabled && mapView != null) {
+        if (isAutoFollowEnabled && mapView != null && currentLat != 0.0 && currentLon != 0.0) {
             mapView.getController().setZoom(16.0);
-            mapView.getController().setCenter(new GeoPoint(currentLat, currentLon));
+            mapView.getController().animateTo(new GeoPoint(currentLat, currentLon));
         }
         renderMapMarkers();
     }
@@ -466,11 +473,21 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
 
     private void switchTab(int tabIndex) {
         this.currentTabIndex = tabIndex;
-        layoutTabHome.setVisibility(tabIndex == 0 ? View.VISIBLE : View.GONE);
-        layoutTabMap.setVisibility(tabIndex == 1 ? View.VISIBLE : View.GONE);
-        layoutTabGuardians.setVisibility(tabIndex == 2 ? View.VISIBLE : View.GONE);
-        layoutTabHistory.setVisibility(tabIndex == 3 ? View.VISIBLE : View.GONE);
-        layoutTabSettings.setVisibility(tabIndex == 4 ? View.VISIBLE : View.GONE);
+
+        View[] tabs = new View[]{layoutTabHome, layoutTabMap, layoutTabGuardians, layoutTabHistory, layoutTabSettings};
+        for (int i = 0; i < tabs.length; i++) {
+            if (tabs[i] != null) {
+                if (i == tabIndex) {
+                    if (tabs[i].getVisibility() != View.VISIBLE) {
+                        tabs[i].setAlpha(0.0f);
+                        tabs[i].setVisibility(View.VISIBLE);
+                        tabs[i].animate().alpha(1.0f).setDuration(200).start();
+                    }
+                } else {
+                    tabs[i].setVisibility(View.GONE);
+                }
+            }
+        }
 
         if (btnNavHome != null) btnNavHome.setBackgroundResource(tabIndex == 0 ? R.drawable.bg_nav_active_circle : 0);
         if (btnNavMap != null) btnNavMap.setBackgroundResource(tabIndex == 1 ? R.drawable.bg_nav_active_circle : 0);
@@ -872,8 +889,11 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
 
     private void loadMapData() {
         if (mapView == null) return;
-        GeoPoint userPoint = new GeoPoint(currentLat, currentLon);
-        mapView.getController().setCenter(userPoint);
+        if (hasAcquiredFirstLocation && currentLat != 0.0 && currentLon != 0.0) {
+            GeoPoint userPoint = new GeoPoint(currentLat, currentLon);
+            mapView.getController().setZoom(16.0);
+            mapView.getController().animateTo(userPoint);
+        }
 
         threatRepository.getNearbyThreats(currentLat, currentLon, 10000.0, null, new ThreatRepository.ApiCallback<ThreatDto.ThreatListResponseDto>() {
             @Override
@@ -894,11 +914,14 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
         mapView.getOverlays().clear();
 
         // 1. User Current Location Marker
-        Marker userMarker = new Marker(mapView);
-        userMarker.setPosition(new GeoPoint(currentLat, currentLon));
-        userMarker.setTitle("Current Location");
-        userMarker.setSnippet("Tracking active");
-        mapView.getOverlays().add(userMarker);
+        if (hasAcquiredFirstLocation && currentLat != 0.0 && currentLon != 0.0) {
+            Marker userMarker = new Marker(mapView);
+            userMarker.setPosition(new GeoPoint(currentLat, currentLon));
+            userMarker.setTitle("📍 Your Current Location");
+            userMarker.setSnippet("Tracking active");
+            userMarker.setIcon(ContextCompat.getDrawable(this, android.R.drawable.ic_menu_compass));
+            mapView.getOverlays().add(userMarker);
+        }
 
         // 2. Active Threat Markers
         for (ThreatDto t : loadedThreats) {
@@ -910,7 +933,7 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
             threatMarker.setPosition(new GeoPoint(t.getLatitude(), t.getLongitude()));
             threatMarker.setTitle(t.getCategory() + ": " + t.getTitle());
             threatMarker.setSnippet("Severity: " + t.getSeverity() + "/10 | Radius: " + (int) t.getRadius() + "m\n" + (t.getDescription() != null ? t.getDescription() : ""));
-            
+
             threatMarker.setOnMarkerClickListener((marker, mapView) -> {
                 new AlertDialog.Builder(MainActivity.this)
                         .setTitle("⚠ " + t.getCategory() + " ALERT")
