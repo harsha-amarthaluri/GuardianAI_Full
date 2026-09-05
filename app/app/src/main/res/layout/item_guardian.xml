@@ -2,55 +2,112 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:background="@drawable/bg_card_white"
     android:padding="16dp"
-    android:gravity="center_vertical"
-    android:layout_marginBottom="10dp">
+    android:layout_marginBottom="12dp">
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="8dp">
 
-        <TextView
-            android:id="@+id/textGuardianName"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Guardian Name"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@color/text_primary" />
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textGuardianDetails"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Phone | Email"
-            android:textSize="13sp"
-            android:textColor="@color/text_secondary" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/textGuardianName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Guardian Name"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginEnd="8dp" />
+
+                <TextView
+                    android:id="@+id/textGuardianPriority"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PRIMARY"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/bg_chip_active"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="2dp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textGuardianDetails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Phone | Email"
+                android:textSize="13sp"
+                android:textColor="@color/text_secondary"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnEditGuardian"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
-        android:text="Edit"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        android:background="@drawable/bg_btn_primary"
-        android:textColor="#FFFFFF"
-        android:layout_marginEnd="6dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
 
-    <Button
-        android:id="@+id/btnDeleteGuardian"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
-        android:text="Del"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        android:background="@drawable/bg_btn_sos"
-        android:textColor="#FFFFFF" />
+        <Button
+            android:id="@+id/btnCallGuardian"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="📞 Call"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:background="@drawable/bg_chip_inactive"
+            android:textColor="@color/text_primary"
+            android:layout_marginEnd="6dp" />
+
+        <Button
+            android:id="@+id/btnSmsGuardian"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="💬 SMS"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:background="@drawable/bg_chip_inactive"
+            android:textColor="@color/text_primary"
+            android:layout_marginEnd="6dp" />
+
+        <Button
+            android:id="@+id/btnEditGuardian"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="✏️ Edit"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:background="@drawable/bg_btn_primary"
+            android:textColor="#FFFFFF"
+            android:layout_marginEnd="6dp" />
+
+        <Button
+            android:id="@+id/btnDeleteGuardian"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="🗑️"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:background="@drawable/bg_btn_sos"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
 
 </LinearLayout>

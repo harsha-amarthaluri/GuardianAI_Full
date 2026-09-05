@@ -1,7 +1,7 @@
 {
-  "versionCode": 4,
-  "versionName": "1.0.3",
+  "versionCode": 5,
+  "versionName": "1.0.4",
   "downloadUrl": "https://raw.githubusercontent.com/harsha-amarthaluri/GuardianAI_Full/refs/heads/main/Apk/app-debug.apk",
-  "sha256": "cb49fa9203862e87961e75652349a2be2146f17de7aa3e0b0c650a59c623dea4",
-  "changelog": "• Release v1.0.3 (Build 4)\n• Complete UI Redesign inspired by warm minimalist aesthetic\n• Floating capsule pill bottom navigation bar\n• Real-time FCM emergency notification dispatch\n• SHA-256 cryptographic update integrity validation"
+  "sha256": "e3ff0c1c87bcceed852f6c665a8c829c6f47396babadefdd43ab049d1a4b9bc9",
+  "changelog": "• Release v1.0.4 (Build 5)\n• Complete Master Application Workflow Implementation\n• Real FCM Cloud Messaging token registration & push alerts\n• Central Emergency Response Decision Engine\n• Safe Journey Engine with active route monitoring & completion\n• Interactive SOS Incident Audit Trail Timeline Modal\n• Dynamic Threat Map Overlay Pins & Environmental Risk Engine"
 }

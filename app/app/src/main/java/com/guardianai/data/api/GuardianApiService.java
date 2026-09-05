@@ -82,4 +82,25 @@ public interface GuardianApiService {
 
     @GET("api/v1/sos")
     Call<SOSResponseDto.SOSListResponseDto> listSOSIncidents(@Query("skip") int skip, @Query("limit") int limit);
+
+    @GET("api/v1/sos/{sos_id}/events")
+    Call<List<SOSEventResponseDto>> getSOSEvents(@Path("sos_id") String sosId);
+
+    // Emergency Response Decision Engine
+    @POST("api/v1/emergency/evaluate")
+    Call<EmergencyEvaluationResponseDto> evaluateEmergency(@Body EmergencyEvaluationRequestDto request);
+
+    // Notification FCM Registration
+    @POST("api/v1/notifications/token")
+    Call<Void> registerFcmToken(@Body FCMTokenRequestDto request);
+
+    // Safe Journeys Endpoints
+    @POST("api/v1/journeys/start")
+    Call<JourneyDto> startJourney(@Body JourneyStartRequestDto request);
+
+    @GET("api/v1/journeys/active")
+    Call<JourneyDto> getActiveJourney();
+
+    @POST("api/v1/journeys/{id}/complete")
+    Call<JourneyDto> completeJourney(@Path("id") String journeyId);
 }

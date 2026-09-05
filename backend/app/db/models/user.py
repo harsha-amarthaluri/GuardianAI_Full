@@ -26,3 +26,4 @@ class User(Base):
     locations = rel("Location", back_populates="user", cascade="all, delete-orphan")
     sos_incidents = rel("SOSIncident", back_populates="user", cascade="all, delete-orphan")
     safety_scores = rel("SafetyScore", back_populates="user", cascade="all, delete-orphan")
+    journeys = rel("SafeJourney", back_populates="user", cascade="all, delete-orphan")

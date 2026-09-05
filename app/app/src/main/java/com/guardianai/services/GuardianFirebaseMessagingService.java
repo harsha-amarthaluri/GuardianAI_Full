@@ -51,4 +51,25 @@ public class GuardianFirebaseMessagingService {
         }
         Log.i(TAG, "🚨 [FCM NOTIFICATION DISPATCHED] Title: " + title + " | Message: " + message);
     }
+
+    public static void registerFcmTokenWithBackend(Context context, String token) {
+        if (token == null || token.trim().isEmpty()) return;
+        com.guardianai.data.api.ApiClient.getApiService(context)
+                .registerFcmToken(new com.guardianai.data.models.FCMTokenRequestDto(token, "android"))
+                .enqueue(new retrofit2.Callback<Void>() {
+                    @Override
+                    public void onResponse(retrofit2.Call<Void> call, retrofit2.Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            Log.i(TAG, "Successfully registered FCM token with backend.");
+                        } else {
+                            Log.w(TAG, "Failed to register FCM token. Code: " + response.code());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(retrofit2.Call<Void> call, Throwable t) {
+                        Log.e(TAG, "Error registering FCM token with backend", t);
+                    }
+                });
+    }
 }

@@ -42,14 +42,36 @@ public class SplashActivity extends AppCompatActivity {
         boolean onboardingCompleted = getSharedPreferences("guardian_prefs", MODE_PRIVATE)
                 .getBoolean("onboarding_completed", false);
 
-        Intent intent;
         if (!onboardingCompleted) {
-            intent = new Intent(SplashActivity.this, OnboardingActivity.class);
+            navigateTo(OnboardingActivity.class);
         } else if (tokenManager.hasToken()) {
-            intent = new Intent(SplashActivity.this, MainActivity.class);
+            // Validate token against backend if online
+            new com.guardianai.data.repository.UserRepository(this).getUserProfile(new com.guardianai.data.repository.UserRepository.ApiCallback<com.guardianai.data.models.UserDto>() {
+                @Override
+                public void onSuccess(com.guardianai.data.models.UserDto result) {
+                    navigateTo(MainActivity.class);
+                }
+
+                @Override
+                public void onError(String errorMessage, int statusCode) {
+                    if (statusCode == 401) {
+                        // Token expired or invalid -> clear and force login
+                        tokenManager.clearToken();
+                        navigateTo(LoginActivity.class);
+                    } else {
+                        // Network offline / backend temporary unreachable -> allow offline main activity
+                        navigateTo(MainActivity.class);
+                    }
+                }
+            });
         } else {
-            intent = new Intent(SplashActivity.this, LoginActivity.class);
+            navigateTo(LoginActivity.class);
         }
+    }
+
+    private void navigateTo(Class<?> targetActivity) {
+        Intent intent = new Intent(SplashActivity.this, targetActivity);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         overridePendingTransition(com.guardianai.R.anim.fade_in, com.guardianai.R.anim.fade_out);
         finish();

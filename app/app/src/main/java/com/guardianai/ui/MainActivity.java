@@ -33,6 +33,16 @@ import com.guardianai.utils.ThemeManager;
 import com.guardianai.utils.UpdateManager;
 import com.guardianai.utils.ValidationUtils;
 
+import android.net.Uri;
+import android.os.Looper;
+import java.util.Locale;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
+
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
@@ -66,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
     private View layoutTabGuardians;
     private View layoutTabHistory;
     private View layoutTabSettings;
+    private int currentTabIndex = 0;
+    private long lastBackPressedTime = 0;
 
     // Bottom Navigation Buttons
     private Button btnNavHome, btnNavMap, btnNavGuardians, btnNavHistory, btnNavSettings;
@@ -81,8 +93,16 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
     // Map Tab Components
     private MapView mapView;
     private Button btnFilterAll, btnFilterCrime, btnFilterWeather, btnFilterEnv, btnToggleHeatmap;
+    private Button btnRecenterMap, btnFollowMode, btnZoomIn, btnZoomOut;
+    private TextView textMapStateBanner;
     private String selectedMapCategoryFilter = "ALL";
     private List<ThreatDto> loadedThreats = new ArrayList<>();
+    private boolean isAutoFollowEnabled = true;
+    private boolean hasAcquiredFirstLocation = false;
+
+    // Fused Location Client for UI updates
+    private FusedLocationProviderClient mainFusedLocationClient;
+    private LocationCallback mainLocationCallback;
 
     // Guardian Tab Components
     private LinearLayout containerGuardianList;
@@ -99,17 +119,18 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
     private Button btnThemeDark, btnThemeLight, btnThemeSystem;
 
     // Location State
-    private double currentLat = 37.7749;
-    private double currentLon = -122.4194;
+    private double currentLat = 0.0;
+    private double currentLon = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ThemeManager.applySavedTheme(this);
         super.onCreate(savedInstanceState);
 
-        // Osmdroid Configuration
+        // Osmdroid Configuration with User-Agent
         Context ctx = getApplicationContext();
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
+        Configuration.getInstance().setUserAgentValue(getPackageName());
 
         setContentView(R.layout.activity_main);
 
@@ -192,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
         btnTriggerSOS = findViewById(R.id.btnTriggerSOS);
         btnToggleTracking = findViewById(R.id.btnToggleTracking);
 
-        // Map Views
+        // Map Views & Overlay Controls
         mapView = findViewById(R.id.mapView);
         btnFilterAll = findViewById(R.id.btnFilterAll);
         btnFilterCrime = findViewById(R.id.btnFilterCrime);
@@ -201,11 +222,42 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
         btnToggleHeatmap = findViewById(R.id.btnToggleHeatmap);
         Button btnCalcSafeRoute = findViewById(R.id.btnCalcSafeRoute);
 
+        btnRecenterMap = findViewById(R.id.btnRecenterMap);
+        btnFollowMode = findViewById(R.id.btnFollowMode);
+        btnZoomIn = findViewById(R.id.btnZoomIn);
+        btnZoomOut = findViewById(R.id.btnZoomOut);
+        textMapStateBanner = findViewById(R.id.textMapStateBanner);
+
         if (mapView != null) {
             mapView.setTileSource(TileSourceFactory.MAPNIK);
             mapView.setMultiTouchControls(true);
-            mapView.getController().setZoom(15.0);
-            mapView.getController().setCenter(new GeoPoint(currentLat, currentLon));
+            mapView.getController().setZoom(3.0);
+            mapView.getController().setCenter(new GeoPoint(0.0, 0.0));
+        }
+
+        if (btnRecenterMap != null) {
+            btnRecenterMap.setOnClickListener(v -> {
+                isAutoFollowEnabled = true;
+                updateMapFollowButton();
+                centerMapOnUser();
+                Toast.makeText(MainActivity.this, "Map re-centered to your location.", Toast.LENGTH_SHORT).show();
+            });
+        }
+
+        if (btnFollowMode != null) {
+            btnFollowMode.setOnClickListener(v -> {
+                isAutoFollowEnabled = !isAutoFollowEnabled;
+                updateMapFollowButton();
+                Toast.makeText(MainActivity.this, isAutoFollowEnabled ? "🎯 Auto-Follow Active" : "📍 Manual Map Scroll Mode", Toast.LENGTH_SHORT).show();
+            });
+        }
+
+        if (btnZoomIn != null && mapView != null) {
+            btnZoomIn.setOnClickListener(v -> mapView.getController().zoomIn());
+        }
+
+        if (btnZoomOut != null && mapView != null) {
+            btnZoomOut.setOnClickListener(v -> mapView.getController().zoomOut());
         }
 
         if (btnCalcSafeRoute != null) {
@@ -303,6 +355,86 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
         if (btnCheckUpdates != null) {
             btnCheckUpdates.setOnClickListener(v -> performUpdateCheck());
         }
+
+        initLocationProvider();
+    }
+
+    private void updateMapFollowButton() {
+        if (btnFollowMode != null) {
+            btnFollowMode.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
+                    Color.parseColor(isAutoFollowEnabled ? "#0EA5E9" : "#64748B")
+            ));
+        }
+    }
+
+    private void centerMapOnUser() {
+        if (mapView != null && hasAcquiredFirstLocation) {
+            mapView.getController().setZoom(16.0);
+            mapView.getController().animateTo(new GeoPoint(currentLat, currentLon));
+            renderMapMarkers();
+        }
+    }
+
+    private void initLocationProvider() {
+        mainFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        mainLocationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) return;
+                for (android.location.Location loc : locationResult.getLocations()) {
+                    if (loc != null) {
+                        onLocationAcquired(loc);
+                    }
+                }
+            }
+        };
+
+        if (hasLocationPermission()) {
+            startLocationUpdatesClient();
+        }
+    }
+
+    private void startLocationUpdatesClient() {
+        if (!hasLocationPermission()) return;
+        try {
+            LocationRequest req = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000)
+                    .setMinUpdateIntervalMillis(5000)
+                    .build();
+            mainFusedLocationClient.requestLocationUpdates(req, mainLocationCallback, Looper.getMainLooper());
+        } catch (SecurityException ignored) {}
+    }
+
+    private void onLocationAcquired(android.location.Location location) {
+        currentLat = location.getLatitude();
+        currentLon = location.getLongitude();
+        hasAcquiredFirstLocation = true;
+
+        float accuracy = location.hasAccuracy() ? location.getAccuracy() : 0.0f;
+        String timeStr = new java.text.SimpleDateFormat("HH:mm:ss", Locale.US).format(new java.util.Date(location.getTime()));
+        String statusText = String.format(Locale.US, "GPS ACTIVE • Coordinates: %.4f, %.4f (Acc: %.0fm, Last: %s)", currentLat, currentLon, accuracy, timeStr);
+
+        textLocationStatus.setText(statusText);
+        if (textMapStateBanner != null) {
+            textMapStateBanner.setText(String.format(Locale.US, "🟢 GPS ACTIVE • Acc: %.0fm • %s", accuracy, timeStr));
+        }
+
+        if (isAutoFollowEnabled && mapView != null) {
+            mapView.getController().setZoom(16.0);
+            mapView.getController().setCenter(new GeoPoint(currentLat, currentLon));
+        }
+        renderMapMarkers();
+    }
+
+    private void setTrackingMode(LocationTrackingService.TrackingMode mode) {
+        Intent serviceIntent = new Intent(this, LocationTrackingService.class);
+        serviceIntent.setAction(LocationTrackingService.ACTION_SET_MODE);
+        serviceIntent.putExtra(LocationTrackingService.EXTRA_MODE, mode.name());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(serviceIntent);
+        } else {
+            startService(serviceIntent);
+        }
+        Toast.makeText(this, "Location Guard Mode set to: " + mode.name(), Toast.LENGTH_SHORT).show();
     }
 
     private void setupNavigation() {
@@ -316,6 +448,7 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
     }
 
     private void switchTab(int tabIndex) {
+        this.currentTabIndex = tabIndex;
         layoutTabHome.setVisibility(tabIndex == 0 ? View.VISIBLE : View.GONE);
         layoutTabMap.setVisibility(tabIndex == 1 ? View.VISIBLE : View.GONE);
         layoutTabGuardians.setVisibility(tabIndex == 2 ? View.VISIBLE : View.GONE);
@@ -333,6 +466,21 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
         if (tabIndex == 2) loadGuardiansData();
         if (tabIndex == 3) loadHistoryData();
         if (tabIndex == 4) loadSettingsData();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (currentTabIndex != 0) {
+            switchTab(0);
+            return;
+        }
+
+        if (System.currentTimeMillis() - lastBackPressedTime < 2000) {
+            super.onBackPressed();
+        } else {
+            lastBackPressedTime = System.currentTimeMillis();
+            Toast.makeText(this, "Press back again to exit Guardian AI", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void checkNetworkState() {
@@ -769,15 +917,45 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
                     return;
                 }
 
-                for (GuardianDto g : guardians) {
+                for (int i = 0; i < guardians.size(); i++) {
+                    GuardianDto g = guardians.get(i);
                     View itemView = LayoutInflater.from(MainActivity.this).inflate(R.layout.item_guardian, containerGuardianList, false);
                     TextView textName = itemView.findViewById(R.id.textGuardianName);
+                    TextView textPriority = itemView.findViewById(R.id.textGuardianPriority);
                     TextView textDetails = itemView.findViewById(R.id.textGuardianDetails);
+                    Button btnCall = itemView.findViewById(R.id.btnCallGuardian);
+                    Button btnSms = itemView.findViewById(R.id.btnSmsGuardian);
                     Button btnEdit = itemView.findViewById(R.id.btnEditGuardian);
                     Button btnDelete = itemView.findViewById(R.id.btnDeleteGuardian);
 
                     textName.setText(g.getName() + " (" + g.getRelationship() + ")");
                     textDetails.setText("Phone: " + g.getPhone() + (g.getEmail() != null ? " | Email: " + g.getEmail() : ""));
+
+                    // Priority Assignment
+                    String priorityText = "PRIMARY";
+                    String priorityColor = "#10B981";
+                    if (i == 1) { priorityText = "SECONDARY"; priorityColor = "#0EA5E9"; }
+                    else if (i >= 2) { priorityText = "TERTIARY"; priorityColor = "#64748B"; }
+
+                    if (textPriority != null) {
+                        textPriority.setText(priorityText);
+                        textPriority.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.parseColor(priorityColor)));
+                    }
+
+                    if (btnCall != null) {
+                        btnCall.setOnClickListener(v -> {
+                            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + g.getPhone()));
+                            startActivity(intent);
+                        });
+                    }
+
+                    if (btnSms != null) {
+                        btnSms.setOnClickListener(v -> {
+                            Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + g.getPhone()));
+                            intent.putExtra("sms_body", "Guardian AI Emergency Safety Alert: I am sharing my live protection status.");
+                            startActivity(intent);
+                        });
+                    }
 
                     btnEdit.setOnClickListener(v -> showEditGuardianDialog(g));
                     btnDelete.setOnClickListener(v -> confirmDeleteGuardian(g));
@@ -925,8 +1103,9 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
                     TextView textDetails = itemView.findViewById(R.id.textSOSDetails);
 
                     textTrigger.setText("SOS: " + sos.getTriggerType() + " | Status: " + sos.getStatus());
-                    textDetails.setText(String.format("Location: %.4f, %.4f\nTime: %s", sos.getLatitude(), sos.getLongitude(), sos.getCreatedAt()));
+                    textDetails.setText(String.format("Location: %.4f, %.4f\nTime: %s\n(Tap to view audit timeline)", sos.getLatitude(), sos.getLongitude(), sos.getCreatedAt()));
 
+                    itemView.setOnClickListener(v -> showSOSEventTimelineDialog(sos.getId()));
                     containerHistoryList.addView(itemView);
                 }
             }
@@ -936,6 +1115,34 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
                 Toast.makeText(MainActivity.this, "Failed to load incident history: " + errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void showSOSEventTimelineDialog(String sosId) {
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_sos_audit_timeline, null);
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .create();
+
+        androidx.recyclerview.widget.RecyclerView rvEvents = dialogView.findViewById(R.id.rv_sos_events);
+        rvEvents.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(this));
+        com.guardianai.ui.adapters.SOSEventAdapter adapter = new com.guardianai.ui.adapters.SOSEventAdapter();
+        rvEvents.setAdapter(adapter);
+
+        dialogView.findViewById(R.id.btn_close_dialog).setOnClickListener(v -> dialog.dismiss());
+
+        sosRepository.getSOSEvents(sosId, new SOSRepository.ApiCallback<java.util.List<SOSEventResponseDto>>() {
+            @Override
+            public void onSuccess(java.util.List<SOSEventResponseDto> events) {
+                adapter.setEvents(events);
+            }
+
+            @Override
+            public void onError(String errorMessage, int statusCode) {
+                Toast.makeText(MainActivity.this, "Failed to load audit events: " + errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        dialog.show();
     }
 
     // ==========================================

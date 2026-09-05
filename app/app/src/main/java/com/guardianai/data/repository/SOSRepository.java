@@ -61,6 +61,24 @@ public class SOSRepository {
         });
     }
 
+    public void getSOSEvents(String sosId, ApiCallback<java.util.List<com.guardianai.data.models.SOSEventResponseDto>> callback) {
+        apiService.getSOSEvents(sosId).enqueue(new Callback<java.util.List<com.guardianai.data.models.SOSEventResponseDto>>() {
+            @Override
+            public void onResponse(Call<java.util.List<com.guardianai.data.models.SOSEventResponseDto>> call, Response<java.util.List<com.guardianai.data.models.SOSEventResponseDto>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onSuccess(response.body());
+                } else {
+                    callback.onError(parseError(response), response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<java.util.List<com.guardianai.data.models.SOSEventResponseDto>> call, Throwable t) {
+                callback.onError("Network error: " + t.getMessage(), 0);
+            }
+        });
+    }
+
     private String parseError(Response<?> response) {
         try {
             if (response.errorBody() != null) {

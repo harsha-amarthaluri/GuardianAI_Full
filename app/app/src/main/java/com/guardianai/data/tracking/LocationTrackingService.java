@@ -51,6 +51,17 @@ public class LocationTrackingService extends Service {
         };
     }
 
+    public static final String ACTION_SET_MODE = "com.guardianai.action.SET_TRACKING_MODE";
+    public static final String EXTRA_MODE = "extra_tracking_mode";
+
+    public enum TrackingMode {
+        NORMAL,
+        TRAVEL,
+        EMERGENCY
+    }
+
+    private TrackingMode currentMode = TrackingMode.NORMAL;
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "Starting LocationTrackingService foreground acquisition...");
@@ -60,6 +71,16 @@ public class LocationTrackingService extends Service {
         // Start Foreground Service with ongoing notification
         startForeground(NOTIFICATION_ID, notification);
 
+        if (intent != null && ACTION_SET_MODE.equals(intent.getAction())) {
+            String modeStr = intent.getStringExtra(EXTRA_MODE);
+            if (modeStr != null) {
+                try {
+                    currentMode = TrackingMode.valueOf(modeStr);
+                    Log.i(TAG, "Switched tracking mode to: " + currentMode);
+                } catch (Exception ignored) {}
+            }
+        }
+
         TrackingStateManager.getInstance().setState(TrackingStateManager.TrackingState.STARTING);
         startLocationUpdates();
 
@@ -67,15 +88,38 @@ public class LocationTrackingService extends Service {
     }
 
     private void startLocationUpdates() {
-        LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_BALANCED_POWER_ACCURACY, UPDATE_INTERVAL_MS)
-                .setMinUpdateIntervalMillis(FASTEST_INTERVAL_MS)
-                .setMinUpdateDistanceMeters(MIN_DISPLACEMENT_METERS)
+        if (fusedLocationClient != null && locationCallback != null) {
+            fusedLocationClient.removeLocationUpdates(locationCallback);
+        }
+
+        long updateInterval = 30000;
+        long fastestInterval = 15000;
+        float minDisplacement = 20.0f;
+        int priority = Priority.PRIORITY_BALANCED_POWER_ACCURACY;
+
+        if (currentMode == TrackingMode.TRAVEL) {
+            updateInterval = 10000;
+            fastestInterval = 5000;
+            minDisplacement = 5.0f;
+            priority = Priority.PRIORITY_HIGH_ACCURACY;
+        } else if (currentMode == TrackingMode.EMERGENCY) {
+            updateInterval = 3000;
+            fastestInterval = 1000;
+            minDisplacement = 0.0f;
+            priority = Priority.PRIORITY_HIGH_ACCURACY;
+        }
+
+        LocationRequest locationRequest = new LocationRequest.Builder(priority, updateInterval)
+                .setMinUpdateIntervalMillis(fastestInterval)
+                .setMinUpdateDistanceMeters(minDisplacement)
                 .build();
 
         try {
             fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
-            TrackingStateManager.getInstance().setState(TrackingStateManager.TrackingState.RUNNING);
-            Log.i(TAG, "FusedLocationProviderClient requested updates successfully.");
+            TrackingStateManager.getInstance().setState(
+                    currentMode == TrackingMode.EMERGENCY ? TrackingStateManager.TrackingState.RUNNING : TrackingStateManager.TrackingState.RUNNING
+            );
+            Log.i(TAG, "FusedLocationProviderClient requested updates successfully (" + currentMode + " mode).");
         } catch (SecurityException e) {
             Log.e(TAG, "SecurityException starting location updates: " + e.getMessage());
             TrackingStateManager.getInstance().setState(TrackingStateManager.TrackingState.PERMISSION_REQUIRED);

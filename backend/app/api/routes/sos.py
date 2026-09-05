@@ -1,10 +1,12 @@
-from fastapi import APIRouter, Depends, Query, status
+from typing import List
+from fastapi import APIRouter, Depends, Query, status, HTTPException
 from sqlalchemy.orm import Session
 
 from app.db.database import get_db
 from app.db.models.user import User
 from app.dependencies.auth import get_current_user
 from app.schemas.sos import SOSCreateRequest, SOSResponse, SOSListResponse
+from app.schemas.sos_event import SOSEventResponse
 from app.services.sos_service import SOSService
 
 router = APIRouter()
@@ -39,3 +41,19 @@ def list_sos_incidents(
 ):
     service = SOSService(db)
     return service.list_user_incidents(current_user.id, skip=skip, limit=limit)
+
+@router.get(
+    "/{sos_id}/events",
+    response_model=List[SOSEventResponse],
+    status_code=status.HTTP_200_OK,
+    summary="Get SOS Incident Audit Trail",
+    description="Returns the chronological event log for a specific SOS incident."
+)
+def get_sos_incident_events(
+    sos_id: str,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    service = SOSService(db)
+    events = service.get_sos_events(current_user.id, sos_id)
+    return events
