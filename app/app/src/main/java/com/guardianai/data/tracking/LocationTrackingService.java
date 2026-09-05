@@ -60,6 +60,18 @@ public class LocationTrackingService extends Service {
         EMERGENCY
     }
 
+    public static void setMode(Context context, TrackingMode mode) {
+        if (context == null || mode == null) return;
+        Intent intent = new Intent(context, LocationTrackingService.class);
+        intent.setAction(ACTION_SET_MODE);
+        intent.putExtra(EXTRA_MODE, mode.name());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(intent);
+        } else {
+            context.startService(intent);
+        }
+    }
+
     private TrackingMode currentMode = TrackingMode.NORMAL;
 
     @Override

@@ -247,6 +247,83 @@
                         </LinearLayout>
                     </HorizontalScrollView>
 
+                    <!-- Safe Journey Control Card -->
+                    <LinearLayout
+                        android:id="@+id/cardSafeJourney"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:background="@drawable/bg_card_white"
+                        android:padding="18dp"
+                        android:layout_marginBottom="14dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="6dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="🚦 Safe Journey Protection"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_primary" />
+
+                            <TextView
+                                android:id="@+id/textJourneyStatusBadge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="INACTIVE"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:textColor="#64748B"
+                                android:background="@drawable/bg_chip_inactive"
+                                android:paddingHorizontal="10dp"
+                                android:paddingVertical="4dp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/textJourneyDetails"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="No active journey. Start a journey for live ETA countdown &amp; guardian monitoring."
+                            android:textColor="@color/text_secondary"
+                            android:textSize="13sp"
+                            android:layout_marginBottom="12dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/btnStartJourney"
+                                android:layout_width="0dp"
+                                android:layout_height="44dp"
+                                android:layout_weight="1"
+                                android:text="Start New Journey"
+                                android:textColor="#FFFFFF"
+                                android:textStyle="bold"
+                                android:background="@drawable/bg_btn_primary"
+                                android:layout_marginEnd="6dp" />
+
+                            <Button
+                                android:id="@+id/btnCompleteJourney"
+                                android:layout_width="0dp"
+                                android:layout_height="44dp"
+                                android:layout_weight="1"
+                                android:text="Arrived Safely"
+                                android:textColor="#FFFFFF"
+                                android:textStyle="bold"
+                                android:background="@drawable/bg_chip_active"
+                                android:visibility="gone" />
+                        </LinearLayout>
+                    </LinearLayout>
+
                     <!-- White Card 1: Continuous Tracking Control -->
                     <LinearLayout
                         android:layout_width="match_parent"

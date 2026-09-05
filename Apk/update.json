@@ -1,7 +1,7 @@
 {
-  "versionCode": 5,
-  "versionName": "1.0.4",
+  "versionCode": 6,
+  "versionName": "1.0.5",
   "downloadUrl": "https://raw.githubusercontent.com/harsha-amarthaluri/GuardianAI_Full/refs/heads/main/Apk/app-debug.apk",
-  "sha256": "e3ff0c1c87bcceed852f6c665a8c829c6f47396babadefdd43ab049d1a4b9bc9",
-  "changelog": "• Release v1.0.4 (Build 5)\n• Complete Master Application Workflow Implementation\n• Real FCM Cloud Messaging token registration & push alerts\n• Central Emergency Response Decision Engine\n• Safe Journey Engine with active route monitoring & completion\n• Interactive SOS Incident Audit Trail Timeline Modal\n• Dynamic Threat Map Overlay Pins & Environmental Risk Engine"
+  "sha256": "9272850191c62a8a4c23dd43c00eb2f2b415f9fa21145015edf3c4d9a0a47335",
+  "changelog": "• Release v1.0.5 (Build 6)\n• Active Safe Journey UI Protection Card wired to backend Journey Engine\n• Live destination & arrival ETA tracking with TRAVEL frequency mode\n• Real FCM Cloud Messaging token registration & push alerts\n• Central Emergency Response Decision Engine\n• Interactive SOS Incident Audit Trail Timeline Modal\n• Dynamic Threat Map Overlay Pins & Environmental Risk Engine"
 }

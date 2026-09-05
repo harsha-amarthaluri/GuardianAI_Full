@@ -65,10 +65,13 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
     private SOSRepository sosRepository;
     private ThreatRepository threatRepository;
     private WeatherRepository weatherRepository;
+    private JourneyRepository journeyRepository;
 
-    // Sensor Manager
+    // Sensor & Emergency Engine
     private SensorDetectionManager sensorDetectionManager;
+    private com.guardianai.data.emergency.EmergencyResponseEngine emergencyResponseEngine;
     private boolean isHeatmapActive = false;
+    private String activeJourneyId = null;
 
     // Navigation Tabs Container Views
     private View layoutTabHome;
@@ -87,8 +90,9 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
 
     // Home Tab Components
     private TextView textSafetyScore, textRiskCategory, textScoreDisclaimer, textLocationStatus, textTrackingStatus, textWeatherStatus;
+    private TextView textJourneyStatusBadge, textJourneyDetails;
     private LinearLayout containerSafetyFactors, containerDashboardThreats;
-    private Button btnRequestLocationPermission, btnSubmitLocation, btnTriggerSOS, btnToggleTracking;
+    private Button btnRequestLocationPermission, btnSubmitLocation, btnTriggerSOS, btnToggleTracking, btnStartJourney, btnCompleteJourney;
 
     // Map Tab Components
     private MapView mapView;
@@ -142,6 +146,8 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
         sosRepository = new SOSRepository(this);
         threatRepository = new ThreatRepository(this);
         weatherRepository = new WeatherRepository(this);
+        journeyRepository = new JourneyRepository(this);
+        emergencyResponseEngine = new com.guardianai.data.emergency.EmergencyResponseEngine(this);
 
         // Sensor Manager Initialization
         sensorDetectionManager = new SensorDetectionManager(this);
@@ -206,12 +212,23 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
         textLocationStatus = findViewById(R.id.textLocationStatus);
         textTrackingStatus = findViewById(R.id.textTrackingStatus);
         textWeatherStatus = findViewById(R.id.textWeatherStatus);
+        textJourneyStatusBadge = findViewById(R.id.textJourneyStatusBadge);
+        textJourneyDetails = findViewById(R.id.textJourneyDetails);
         containerSafetyFactors = findViewById(R.id.containerSafetyFactors);
         containerDashboardThreats = findViewById(R.id.containerDashboardThreats);
         btnRequestLocationPermission = findViewById(R.id.btnRequestLocationPermission);
         btnSubmitLocation = findViewById(R.id.btnSubmitLocation);
         btnTriggerSOS = findViewById(R.id.btnTriggerSOS);
         btnToggleTracking = findViewById(R.id.btnToggleTracking);
+        btnStartJourney = findViewById(R.id.btnStartJourney);
+        btnCompleteJourney = findViewById(R.id.btnCompleteJourney);
+
+        if (btnStartJourney != null) {
+            btnStartJourney.setOnClickListener(v -> showStartJourneyDialog());
+        }
+        if (btnCompleteJourney != null) {
+            btnCompleteJourney.setOnClickListener(v -> completeActiveJourney());
+        }
 
         // Map Views & Overlay Controls
         mapView = findViewById(R.id.mapView);
@@ -568,6 +585,7 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
     // ==========================================
     private void loadHomeData() {
         checkNetworkState();
+        checkActiveJourneyState();
         safetyRepository.getSafetyScore(currentLat, currentLon, new SafetyRepository.ApiCallback<SafetyScoreResponseDto>() {
             @Override
             public void onSuccess(SafetyScoreResponseDto result) {
@@ -661,6 +679,130 @@ public class MainActivity extends AppCompatActivity implements TrackingStateMana
             @Override
             public void onError(String errorMessage, int statusCode) {}
         });
+    }
+
+    private void checkActiveJourneyState() {
+        if (journeyRepository == null) return;
+        journeyRepository.getActiveJourney(new JourneyRepository.ApiCallback<JourneyDto>() {
+            @Override
+            public void onSuccess(JourneyDto journey) {
+                if (journey != null) {
+                    activeJourneyId = journey.getId();
+                    updateJourneyUI(journey);
+                } else {
+                    activeJourneyId = null;
+                    updateJourneyUI(null);
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                activeJourneyId = null;
+                updateJourneyUI(null);
+            }
+        });
+    }
+
+    private void showStartJourneyDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(32, 24, 32, 24);
+
+        final EditText editDest = new EditText(this);
+        editDest.setHint("Destination (e.g. Home, Office)");
+        layout.addView(editDest);
+
+        final EditText editEta = new EditText(this);
+        editEta.setHint("Expected Arrival Time (Minutes, e.g. 30)");
+        editEta.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
+        layout.addView(editEta);
+
+        builder.setTitle("🚦 Start Safe Journey")
+                .setMessage("Set destination & arrival ETA for live guardian tracking:")
+                .setView(layout)
+                .setPositiveButton("Start Journey", (dialog, which) -> {
+                    String dest = editDest.getText().toString().trim();
+                    String minsStr = editEta.getText().toString().trim();
+                    if (dest.isEmpty()) dest = "Destination";
+                    int mins = 30;
+                    try {
+                        if (!minsStr.isEmpty()) mins = Integer.parseInt(minsStr);
+                    } catch (Exception ignored) {}
+
+                    double destLat = currentLat + 0.01;
+                    double destLon = currentLon + 0.01;
+
+                    String etaIso = "";
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        etaIso = java.time.ZonedDateTime.now(java.time.ZoneOffset.UTC).plusMinutes(mins).format(java.time.format.DateTimeFormatter.ISO_INSTANT);
+                    } else {
+                        etaIso = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US).format(new java.util.Date(System.currentTimeMillis() + mins * 60000L));
+                    }
+
+                    JourneyStartRequestDto req = new JourneyStartRequestDto(
+                            currentLat, currentLon, dest, destLat, destLon, etaIso
+                    );
+
+                    journeyRepository.startJourney(req, new JourneyRepository.ApiCallback<JourneyDto>() {
+                        @Override
+                        public void onSuccess(JourneyDto journey) {
+                            activeJourneyId = journey.getId();
+                            updateJourneyUI(journey);
+                            Toast.makeText(MainActivity.this, "Safe Journey started! High-frequency tracking active.", Toast.LENGTH_SHORT).show();
+                            LocationTrackingService.setMode(MainActivity.this, LocationTrackingService.TrackingMode.TRAVEL);
+                        }
+
+                        @Override
+                        public void onError(String errorMessage) {
+                            Toast.makeText(MainActivity.this, "Error starting journey: " + errorMessage, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    private void completeActiveJourney() {
+        if (activeJourneyId == null) return;
+        journeyRepository.completeJourney(activeJourneyId, new JourneyRepository.ApiCallback<JourneyDto>() {
+            @Override
+            public void onSuccess(JourneyDto journey) {
+                activeJourneyId = null;
+                updateJourneyUI(null);
+                Toast.makeText(MainActivity.this, "🎉 Journey Completed Safely!", Toast.LENGTH_LONG).show();
+                LocationTrackingService.setMode(MainActivity.this, LocationTrackingService.TrackingMode.NORMAL);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Toast.makeText(MainActivity.this, "Error completing journey: " + errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void updateJourneyUI(JourneyDto journey) {
+        if (journey != null && "ACTIVE".equals(journey.getStatus())) {
+            if (textJourneyStatusBadge != null) {
+                textJourneyStatusBadge.setText("ACTIVE");
+                textJourneyStatusBadge.setTextColor(Color.parseColor("#059669"));
+            }
+            if (textJourneyDetails != null) {
+                textJourneyDetails.setText("Destination: " + (journey.getDestinationAddress() != null ? journey.getDestinationAddress() : "Active Route") + "\nStatus: High-frequency guardian tracking active");
+            }
+            if (btnStartJourney != null) btnStartJourney.setVisibility(View.GONE);
+            if (btnCompleteJourney != null) btnCompleteJourney.setVisibility(View.VISIBLE);
+        } else {
+            if (textJourneyStatusBadge != null) {
+                textJourneyStatusBadge.setText("INACTIVE");
+                textJourneyStatusBadge.setTextColor(Color.parseColor("#64748B"));
+            }
+            if (textJourneyDetails != null) {
+                textJourneyDetails.setText("No active journey. Start a journey for live ETA countdown & guardian monitoring.");
+            }
+            if (btnStartJourney != null) btnStartJourney.setVisibility(View.VISIBLE);
+            if (btnCompleteJourney != null) btnCompleteJourney.setVisibility(View.GONE);
+        }
     }
 
     private void checkLocationPermissionState() {
